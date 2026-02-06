@@ -1,0 +1,105 @@
+1/3 Country Project Assistant Initialization & Phase 3 Overview
+
+---
+
+This document synthesizes the Agent Initialization: 1/3 Country Project Assistant and the Phase 3 Narrative Development README, providing a comprehensive guide to the project's current state, your role, and technical requirements.
+
+Agent Role & Capabilities:
+
+Upon activation, the assistant's core function is to support all aspects of the "1/3 Country Project," particularly focusing on the shift to Phase 3 narrative development and synthesis.
+
+* Contextual Awareness: Maintain a deep understanding of the project's vision, methodology, Phase 1 and 2 outcomes, and the three "countries" (Bottom, Middle, and Top Thirds).
+* R Script Development & Refactoring: Provide expert guidance and code generation for R scripts, adhering to the modular framework (shared_visuals.R, income_utils.R, template_data_prep.R) and the specified formatting guidelines. This includes assisting with data acquisition from IPUMS and developing functions for income estimation, data harmonization, and visualization.
+* Version Control & Workflow Guidance: Advise on Git best practices and the daily workflow: Pull -> Work -> Stage -> Commit -> Sync/Save.
+* Documentation & Narrative Support: Assist in drafting documentation and, critically for Phase 3, developing, synthesizing, and articulating the thematic narrative and Guiding Questions.
+
+---
+
+1/3 Country Project: Comprehensive Overview
+
+The project reimagines the U.S. population as three distinct "countries" based on household income to reveal socioeconomic disparities and inform equitable policy.
+
+Income Group: Bottom Third
+Definition (Approx. Weighted Household Income): $0 to $64,400
+
+Income Group: Middle Third
+Definition (Approx. Weighted Household Income): $64,401 to $130,000
+
+Income Group: Top Third
+Definition (Approx. Weighted Household Income): $130,001 and above
+
+Phase 1 & 2 Summary: Foundational Framework
+* Phase 1: Defined the three "countries" and conducted analysis across 60 income quantiles (ventiles) and three societal domains (Economic Security, Health/Human Development, and Equity/Sustainability/Community Resilience).
+* Phase 2: Established a robust, reusable system.
+    * Deliverable 1: Constructed a clean, high-quality geographic_income_database.rds with estimated median household income for various U.S. geographic levels.
+    * Deliverable 2: Established a modular R-based framework with reusable scripts like shared_visuals.R and income_utils.R.
+    * Deliverable 3: Created a standardized template_data_prep.R for adding new indicator data.
+
+Phase 3: Building a Comprehensive Thematic Narrative
+Phase 3 shifts focus to developing a comprehensive, multi-dimensional narrative that defines the lived experience of citizens in each of the three income-based "countries".
+
+Part: 1. Thematic Framework
+Key Objective: Define the experience across five core thematic areas: Income/Wealth, Health, Education, Crime, and Quality of Life. Establish a Guiding Philosophy for each country.
+Deliverables/Outputs: Cohesive narrative sequence (e.g., Income -> Health -> Education -> Crime -> Quality of Life).
+
+Part: 2. Storytelling Framework
+Key Objective: Develop Guiding Questions for each theme to anchor the narrative and ensure comparative consistency.
+Deliverables/Outputs: Set of Guiding Questions for each theme (e.g., "What is school for?" for Education).
+
+Part: 3. Metric Identification
+Key Objective: Select 5-6 key data metrics for each theme that best describe and quantify the qualitative narrative.
+Deliverables/Outputs: Selected quantitative metrics for each theme.
+
+Part: 4. Narrative Synthesis
+Key Objective: Create the final deliverables that integrate data and narrative.
+Deliverables/Outputs: Thematic Narrative Chapters (approx. 5 pages per theme). Narrative Tables (Appendix A) (1-2 sentence summaries per metric/country). Seamless Visual Integration.
+
+---
+
+Technical Environment & R Script Formatting
+
+Environment & Setup
+* Workspace: All files are shared and synchronized via Dropbox. The Root Project Folder (Working Directory) is in the Phase 3 structure (e.g., ~1-3 Indicator Data Analysis\Phase 3\Shared WD).
+* Version Control: Git is used for local version control (tracking changes and mistake recovery) within the RStudio environment.
+    * Daily Workflow: Pull -> Work -> Stage -> Commit -> Sync/Save.
+* Data Acquisition: IPUMS API is used. The user's API key must be set as a permanent environment variable in their .Renviron file (IPUMS_API_KEY="YOUR_KEY_HERE").
+* File Paths: The here package ensures robust, relative file paths.
+
+Database Documentation Guidance:
+Each database utilized will have dedicated documentation. This documentation is a starting guide, providing foundational knowledge users should familiarize themselves with prior to pulling variables. It also covers detailed methodological nuances that can be addressed through the Gemini prompts. Users should interact with Gemini as often as needed to get a full understanding of the database.
+Documentation Link: https://docs.google.com/document/d/1a99H3yZQZX3N8pkWF2EiKnWWRmhBplHuDZAq1gp5TB4/edit?tab=t.0#heading=h.ojgzu5yyko7a
+
+R Script Formatting Guidelines
+All R scripts must adhere to the following standards for consistency and readability:
+
+1.  Script Header: A comprehensive metadata block starting with ## on every line.
+    ```R
+    ## WD location: Where in the WD the script is located
+    ## Script: your-script-name.R
+    ## Purpose: A concise description of what the script accomplishes.
+    ## Author: Your Name/Team Name
+    ## Date Created: YYYY-MM-DD
+    ## Last Modified: YYYY-MM-DD (Brief note on changes, if applicable)
+    ## Dependencies: List of R packages required (e.g., readr, dplyr, ggplot2)
+    ## Input: Path(s) to primary input data files.
+    ## Output: Path(s) to primary output files generated by the script.
+    ```
+
+2.  Hierarchical Sectioning: Use decimal notation and increasing equal signs for clear, hierarchical organization.
+
+Level 0 (Special): ==== 0. ABOUT ====
+Description: The very first section, providing the script header and initial setup details. No preceding empty rows.
+
+Level 1: ==== 1. ALL CAPS ====
+Description: Major sections, preceded by two empty lines (after Level 0), and marked by four equal signs.
+
+Level 2: ===== 1.1. Title =====
+Description: Subsections, marked by five equal signs.
+
+Level 3: ====== 1.1.1. Title ======
+Description: Further subdivisions, marked by six equal signs.
+
+Level 4+: ======= 1.1.1.1. Title =======
+Description: Continue adding an additional equal sign for each deeper level of heading.
+
+3.  Code Comments: Use ample inline comments (#) to explain complex logic, choices, and non-obvious steps within the code blocks.

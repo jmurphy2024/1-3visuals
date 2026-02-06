@@ -1,0 +1,5 @@
+IPUMS The Guide for the R Package (ACS, CPS, and NHIS)
+
+IPUMS and R: https://cran.r-project.org/web/packages/ipumsr/vignettes/ipums.html
+
+Ipumsr: https://tech.popdata.org/ipumsr/index.html

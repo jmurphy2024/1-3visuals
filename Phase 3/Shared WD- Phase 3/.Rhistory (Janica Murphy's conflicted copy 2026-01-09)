@@ -1,0 +1,512 @@
+# ================================================================= #
+USER_INDICATOR_NAME    <- "Stability_Mosaic_2023"
+USER_ASEC_SAMPLE_ID    <- "cps2023_03s"
+# Corrected IPUMS API Variable Names
+USER_ASEC_VARIABLES <- c(
+"SERIAL",    # Household ID [cite: 175]
+"PERNUM",    # Person ID [cite: 207]
+"ASECWT",    # Weight (MARSUPWT equivalent) [cite: 224]
+"HHINCOME",  # Income (HTOTVAL equivalent) [cite: 90]
+"HCOVANY",   # Health Coverage (COV equivalent)
+"TENURE",    # Asset Security (H_TENURE equivalent)
+"INCPENS",   # Pension/Retirement Access [cite: 711]
+"DIVIDEND",  # Passive Wealth Receipt [cite: 93]
+"EDUC",      # Education (A_HGA equivalent)
+"ASECWTH"    # Household Weight (for Tercile alignment)
+)
+# ================================================================= #
+# ==== 2. API EXECUTION LOGIC ====
+# ================================================================= #
+# --- 2.1. Define Output Directory ---
+OUTPUT_RAW_DIR <- here::here("01_data", "raw", "IPUMS_Microdata",
+paste0("cps_", USER_INDICATOR_NAME, "_", USER_ASEC_SAMPLE_ID))
+if (!dir.exists(OUTPUT_RAW_DIR)) dir.create(OUTPUT_RAW_DIR, showWarnings = FALSE, recursive = TRUE)
+# --- 2.2. API Data Acquisition Function ---
+acquire_asec_via_api <- function(sample_id, variables, indicator_name) {
+message(paste("\n--- Submitting IPUMS API Request for:", indicator_name, "---"))
+# 1. Define the Extract
+extract_definition <- define_extract_micro(
+collection  = "cps",
+description = paste("1/3 Country Project:", indicator_name),
+samples     = sample_id,
+variables   = variables
+)
+# 2. Submit to IPUMS
+submitted_extract <- submit_extract(extract_definition)
+message(paste("Extract Number:", submitted_extract$number, "submitted successfully."))
+# 3. Wait for server processing
+downloadable_extract <- wait_for_extract(submitted_extract)
+# 4. Download files to raw directory
+downloaded_files <- download_extract(
+downloadable_extract,
+download_dir = OUTPUT_RAW_DIR,
+overwrite    = TRUE
+)
+# 5. Locate DDI file for metadata processing
+ddi_file <- downloaded_files[grep("\\.xml$", downloaded_files)][1]
+# 6. Generate Traceability Codebook
+codebook_path <- file.path(OUTPUT_RAW_DIR, paste0("codebook_", tolower(indicator_name), ".txt"))
+generate_codebook_from_ddi(ddi_file, variables, codebook_path)
+# 7. Read and Save as local RDS
+data <- read_ipums_micro(ddi = ddi_file, verbose = FALSE)
+saveRDS(data, file = file.path(OUTPUT_RAW_DIR, "raw_asec_data.rds"))
+message(paste("SUCCESS: Data and codebook saved to:", OUTPUT_RAW_DIR))
+}
+# --- 2.3. Execute ---
+acquire_asec_via_api(
+sample_id      = USER_ASEC_SAMPLE_ID,
+variables      = USER_ASEC_VARIABLES,
+indicator_name = USER_INDICATOR_NAME
+)
+# ==== 0. ABOUT ====
+## WD location: 02_Scripts/III-Data Prep Templates/CPS/ASEC
+## Script: ASEC_Stability_acquire.R
+## Purpose: Utilizes IPUMS API to acquire 2023 ASEC data with socioeconomic
+##          stability indicators identified in the 2023 ASEC Codebook.
+## Author: Max Goshert, EPAG / Gemini
+## Date Created: 2026-01-08
+## Dependencies: ipumsr, dplyr, here, purrr, stringr
+# ==== 0. SETUP ====
+rm(list = ls()); gc()
+library(ipumsr); library(dplyr); library(here); library(purrr); library(stringr)
+# Load shared utilities for group assignment logic
+source(here::here("02_Scripts", "II- Shared Functions", "II-A Shared Utilities.r"))
+# ================================================================= #
+# ==== 1. USER INPUTS: CONFIGURE YOUR DATA DOWNLOAD ====
+# ================================================================= #
+USER_INDICATOR_NAME    <- "Stability_Mosaic_2023"
+USER_ASEC_SAMPLE_ID    <- "cps2023_03s"
+# Corrected IPUMS API Variable Names
+USER_ASEC_VARIABLES <- c(
+"SERIAL",    # Household ID [cite: 175]
+"PERNUM",    # Person ID [cite: 207]
+"ASECWT",    # Weight (MARSUPWT equivalent) [cite: 224]
+"HHINCOME",  # Income (HTOTVAL equivalent) [cite: 90]
+"HCOVANY",   # Health Coverage (COV equivalent)
+"OWNERSHIP",    # Asset Security (H_TENURE equivalent)
+"INCPENS",   # Pension/Retirement Access [cite: 711]
+"INCASSET",  # Passive Wealth Receipt [cite: 93]
+"EDUC",      # Education (A_HGA equivalent)
+"ASECWTH"    # Household Weight (for Tercile alignment)
+)
+# ================================================================= #
+# ==== 2. API EXECUTION LOGIC ====
+# ================================================================= #
+# --- 2.1. Define Output Directory ---
+OUTPUT_RAW_DIR <- here::here("01_data", "raw", "IPUMS_Microdata",
+paste0("cps_", USER_INDICATOR_NAME, "_", USER_ASEC_SAMPLE_ID))
+if (!dir.exists(OUTPUT_RAW_DIR)) dir.create(OUTPUT_RAW_DIR, showWarnings = FALSE, recursive = TRUE)
+# --- 2.2. API Data Acquisition Function ---
+acquire_asec_via_api <- function(sample_id, variables, indicator_name) {
+message(paste("\n--- Submitting IPUMS API Request for:", indicator_name, "---"))
+# 1. Define the Extract
+extract_definition <- define_extract_micro(
+collection  = "cps",
+description = paste("1/3 Country Project:", indicator_name),
+samples     = sample_id,
+variables   = variables
+)
+# 2. Submit to IPUMS
+submitted_extract <- submit_extract(extract_definition)
+message(paste("Extract Number:", submitted_extract$number, "submitted successfully."))
+# 3. Wait for server processing
+downloadable_extract <- wait_for_extract(submitted_extract)
+# 4. Download files to raw directory
+downloaded_files <- download_extract(
+downloadable_extract,
+download_dir = OUTPUT_RAW_DIR,
+overwrite    = TRUE
+)
+# 5. Locate DDI file for metadata processing
+ddi_file <- downloaded_files[grep("\\.xml$", downloaded_files)][1]
+# 6. Generate Traceability Codebook
+codebook_path <- file.path(OUTPUT_RAW_DIR, paste0("codebook_", tolower(indicator_name), ".txt"))
+generate_codebook_from_ddi(ddi_file, variables, codebook_path)
+# 7. Read and Save as local RDS
+data <- read_ipums_micro(ddi = ddi_file, verbose = FALSE)
+saveRDS(data, file = file.path(OUTPUT_RAW_DIR, "raw_asec_data.rds"))
+message(paste("SUCCESS: Data and codebook saved to:", OUTPUT_RAW_DIR))
+}
+# --- 2.3. Execute ---
+acquire_asec_via_api(
+sample_id      = USER_ASEC_SAMPLE_ID,
+variables      = USER_ASEC_VARIABLES,
+indicator_name = USER_INDICATOR_NAME
+)
+# ==== 0. ABOUT ====
+## WD location: 02_Scripts/III-Data Prep Templates/CPS/ASEC
+## Script: ASEC_Stability_acquire.R
+## Purpose: Utilizes IPUMS API to acquire 2023 ASEC data with socioeconomic
+##          stability indicators identified in the 2023 ASEC Codebook.
+## Author: Max Goshert, EPAG / Gemini
+## Date Created: 2026-01-08
+## Dependencies: ipumsr, dplyr, here, purrr, stringr
+# ==== 0. SETUP ====
+rm(list = ls()); gc()
+library(ipumsr); library(dplyr); library(here); library(purrr); library(stringr)
+# Load shared utilities for group assignment logic
+source(here::here("02_Scripts", "II- Shared Functions", "II-A Shared Utilities.r"))
+# ================================================================= #
+# ==== 1. USER INPUTS: CONFIGURE YOUR DATA DOWNLOAD ====
+# ================================================================= #
+USER_INDICATOR_NAME    <- "Stability_Mosaic_2023"
+USER_ASEC_SAMPLE_ID    <- "cps2023_03s"
+# Corrected IPUMS API Variable Names
+USER_ASEC_VARIABLES <- c(
+"SERIAL",    # Household ID [cite: 175]
+"PERNUM",    # Person ID [cite: 207]
+"ASECWT",    # Weight (MARSUPWT equivalent) [cite: 224]
+"HHINCOME",  # Income (HTOTVAL equivalent) [cite: 90]
+"HCOVANY",   # Health Coverage (COV equivalent)
+"OWNERSHP",    # Asset Security (H_TENURE equivalent)
+"INCPENS",   # Pension/Retirement Access [cite: 711]
+"INCASSET",  # Passive Wealth Receipt [cite: 93]
+"EDUC",      # Education (A_HGA equivalent)
+"ASECWTH"    # Household Weight (for Tercile alignment)
+)
+# ================================================================= #
+# ==== 2. API EXECUTION LOGIC ====
+# ================================================================= #
+# --- 2.1. Define Output Directory ---
+OUTPUT_RAW_DIR <- here::here("01_data", "raw", "IPUMS_Microdata",
+paste0("cps_", USER_INDICATOR_NAME, "_", USER_ASEC_SAMPLE_ID))
+if (!dir.exists(OUTPUT_RAW_DIR)) dir.create(OUTPUT_RAW_DIR, showWarnings = FALSE, recursive = TRUE)
+# --- 2.2. API Data Acquisition Function ---
+acquire_asec_via_api <- function(sample_id, variables, indicator_name) {
+message(paste("\n--- Submitting IPUMS API Request for:", indicator_name, "---"))
+# 1. Define the Extract
+extract_definition <- define_extract_micro(
+collection  = "cps",
+description = paste("1/3 Country Project:", indicator_name),
+samples     = sample_id,
+variables   = variables
+)
+# 2. Submit to IPUMS
+submitted_extract <- submit_extract(extract_definition)
+message(paste("Extract Number:", submitted_extract$number, "submitted successfully."))
+# 3. Wait for server processing
+downloadable_extract <- wait_for_extract(submitted_extract)
+# 4. Download files to raw directory
+downloaded_files <- download_extract(
+downloadable_extract,
+download_dir = OUTPUT_RAW_DIR,
+overwrite    = TRUE
+)
+# 5. Locate DDI file for metadata processing
+ddi_file <- downloaded_files[grep("\\.xml$", downloaded_files)][1]
+# 6. Generate Traceability Codebook
+codebook_path <- file.path(OUTPUT_RAW_DIR, paste0("codebook_", tolower(indicator_name), ".txt"))
+generate_codebook_from_ddi(ddi_file, variables, codebook_path)
+# 7. Read and Save as local RDS
+data <- read_ipums_micro(ddi = ddi_file, verbose = FALSE)
+saveRDS(data, file = file.path(OUTPUT_RAW_DIR, "raw_asec_data.rds"))
+message(paste("SUCCESS: Data and codebook saved to:", OUTPUT_RAW_DIR))
+}
+# --- 2.3. Execute ---
+acquire_asec_via_api(
+sample_id      = USER_ASEC_SAMPLE_ID,
+variables      = USER_ASEC_VARIABLES,
+indicator_name = USER_INDICATOR_NAME
+)
+# ==== 0. ABOUT ====
+## WD location: 02_Scripts/III-Data Prep Templates/CPS/ASEC
+## Script: ASEC_Stability_acquire.R
+## Purpose: Utilizes IPUMS API to acquire 2023 ASEC data with socioeconomic
+##          stability indicators identified in the 2023 ASEC Codebook.
+## Author: Janica Murphy, Max Goshert, EPAG / Gemini
+## Date Created: 2026-01-08
+## Dependencies: ipumsr, dplyr, here, purrr, stringr
+# ==== 0. SETUP ====
+rm(list = ls()); gc()
+library(ipumsr); library(dplyr); library(here); library(purrr); library(stringr)
+# Load shared utilities for group assignment logic
+source(here::here("02_Scripts", "II- Shared Functions", "II-A Shared Utilities.r"))
+# ================================================================= #
+# ==== 1. USER INPUTS: CONFIGURE YOUR DATA DOWNLOAD ====
+# ================================================================= #
+USER_INDICATOR_NAME    <- "Stability_Mosaic_2023"
+USER_ASEC_SAMPLE_ID    <- "cps2023_03s"
+# Corrected IPUMS API Variable Names
+USER_ASEC_VARIABLES <- c(
+"SERIAL",    # Household ID [cite: 175]
+"PERNUM",    # Person ID [cite: 207]
+"ASECWT",    # Weight (MARSUPWT equivalent) [cite: 224]
+"HHINCOME",  # Income (HTOTVAL equivalent) [cite: 90]
+"HCOVANY",   # Health Coverage (COV equivalent)
+"OWNERSHP",    # Asset Security (H_TENURE equivalent)
+"INCPENS",   # Pension/Retirement Access [cite: 711]
+"INCDIVID",  # Passive Wealth Receipt [cite: 93]
+"EDUC",      # Education (A_HGA equivalent)
+"ASECWTH"    # Household Weight (for Tercile alignment)
+)
+# ================================================================= #
+# ==== 2. API EXECUTION LOGIC ====
+# ================================================================= #
+# --- 2.1. Define Output Directory ---
+OUTPUT_RAW_DIR <- here::here("01_data", "raw", "IPUMS_Microdata",
+paste0("cps_", USER_INDICATOR_NAME, "_", USER_ASEC_SAMPLE_ID))
+if (!dir.exists(OUTPUT_RAW_DIR)) dir.create(OUTPUT_RAW_DIR, showWarnings = FALSE, recursive = TRUE)
+# --- 2.2. API Data Acquisition Function ---
+acquire_asec_via_api <- function(sample_id, variables, indicator_name) {
+message(paste("\n--- Submitting IPUMS API Request for:", indicator_name, "---"))
+# 1. Define the Extract
+extract_definition <- define_extract_micro(
+collection  = "cps",
+description = paste("1/3 Country Project:", indicator_name),
+samples     = sample_id,
+variables   = variables
+)
+# 2. Submit to IPUMS
+submitted_extract <- submit_extract(extract_definition)
+message(paste("Extract Number:", submitted_extract$number, "submitted successfully."))
+# 3. Wait for server processing
+downloadable_extract <- wait_for_extract(submitted_extract)
+# 4. Download files to raw directory
+downloaded_files <- download_extract(
+downloadable_extract,
+download_dir = OUTPUT_RAW_DIR,
+overwrite    = TRUE
+)
+# 5. Locate DDI file for metadata processing
+ddi_file <- downloaded_files[grep("\\.xml$", downloaded_files)][1]
+# 6. Generate Traceability Codebook
+codebook_path <- file.path(OUTPUT_RAW_DIR, paste0("codebook_", tolower(indicator_name), ".txt"))
+generate_codebook_from_ddi(ddi_file, variables, codebook_path)
+# 7. Read and Save as local RDS
+data <- read_ipums_micro(ddi = ddi_file, verbose = FALSE)
+saveRDS(data, file = file.path(OUTPUT_RAW_DIR, "raw_asec_data.rds"))
+message(paste("SUCCESS: Data and codebook saved to:", OUTPUT_RAW_DIR))
+}
+# --- 2.3. Execute ---
+acquire_asec_via_api(
+sample_id      = USER_ASEC_SAMPLE_ID,
+variables      = USER_ASEC_VARIABLES,
+indicator_name = USER_INDICATOR_NAME
+)
+# ==== 0. ABOUT ====
+## WD location: 02_Scripts/III-Data Prep Templates/CPS/ASEC
+## Script: ASEC_Stability_acquire.R
+## Purpose: Utilizes IPUMS API to acquire 2023 ASEC data with socioeconomic
+##          stability indicators identified in the 2023 ASEC Codebook.
+## Author: Janica Murphy, Max Goshert, EPAG / Gemini
+## Date Created: 2026-01-08
+## Dependencies: ipumsr, dplyr, here, purrr, stringr
+# ==== 0. SETUP ====
+rm(list = ls()); gc()
+library(ipumsr); library(dplyr); library(here); library(purrr); library(stringr)
+# Load shared utilities for group assignment logic
+source(here::here("02_Scripts", "II- Shared Functions", "II-A Shared Utilities.r"))
+# ================================================================= #
+# ==== 1. USER INPUTS: CONFIGURE YOUR DATA DOWNLOAD ====
+# ================================================================= #
+USER_INDICATOR_NAME    <- "Stability_Mosaic_2023"
+USER_ASEC_SAMPLE_ID    <- "cps2023_03s"
+# Corrected IPUMS API Variable Names
+USER_ASEC_VARIABLES <- c(
+"SERIAL",    # Household ID [cite: 175]
+"PERNUM",    # Person ID [cite: 207]
+"ASECWT",    # Weight (MARSUPWT equivalent) [cite: 224]
+"HHINCOME",  # Income (HTOTVAL equivalent) [cite: 90]
+"HCOVANY",   # Health Coverage (COV equivalent)
+"OWNERSHP",    # Asset Security (H_TENURE equivalent)
+"INCPENS",   # Pension/Retirement Access [cite: 711]
+"COVANY",  # Passive Wealth Receipt [cite: 93]
+"EDUC",      # Education (A_HGA equivalent)
+"ASECWTH"    # Household Weight (for Tercile alignment)
+)
+# ================================================================= #
+# ==== 2. API EXECUTION LOGIC ====
+# ================================================================= #
+# --- 2.1. Define Output Directory ---
+OUTPUT_RAW_DIR <- here::here("01_data", "raw", "IPUMS_Microdata",
+paste0("cps_", USER_INDICATOR_NAME, "_", USER_ASEC_SAMPLE_ID))
+if (!dir.exists(OUTPUT_RAW_DIR)) dir.create(OUTPUT_RAW_DIR, showWarnings = FALSE, recursive = TRUE)
+# --- 2.2. API Data Acquisition Function ---
+acquire_asec_via_api <- function(sample_id, variables, indicator_name) {
+message(paste("\n--- Submitting IPUMS API Request for:", indicator_name, "---"))
+# 1. Define the Extract
+extract_definition <- define_extract_micro(
+collection  = "cps",
+description = paste("1/3 Country Project:", indicator_name),
+samples     = sample_id,
+variables   = variables
+)
+# 2. Submit to IPUMS
+submitted_extract <- submit_extract(extract_definition)
+message(paste("Extract Number:", submitted_extract$number, "submitted successfully."))
+# 3. Wait for server processing
+downloadable_extract <- wait_for_extract(submitted_extract)
+# 4. Download files to raw directory
+downloaded_files <- download_extract(
+downloadable_extract,
+download_dir = OUTPUT_RAW_DIR,
+overwrite    = TRUE
+)
+# 5. Locate DDI file for metadata processing
+ddi_file <- downloaded_files[grep("\\.xml$", downloaded_files)][1]
+# 6. Generate Traceability Codebook
+codebook_path <- file.path(OUTPUT_RAW_DIR, paste0("codebook_", tolower(indicator_name), ".txt"))
+generate_codebook_from_ddi(ddi_file, variables, codebook_path)
+# 7. Read and Save as local RDS
+data <- read_ipums_micro(ddi = ddi_file, verbose = FALSE)
+saveRDS(data, file = file.path(OUTPUT_RAW_DIR, "raw_asec_data.rds"))
+message(paste("SUCCESS: Data and codebook saved to:", OUTPUT_RAW_DIR))
+}
+# --- 2.3. Execute ---
+acquire_asec_via_api(
+sample_id      = USER_ASEC_SAMPLE_ID,
+variables      = USER_ASEC_VARIABLES,
+indicator_name = USER_INDICATOR_NAME
+)
+# ==== 0. ABOUT ====
+## WD location: 02_Scripts/III-Data Prep Templates/CPS/ASEC
+## Script: ASEC_Stability_acquire.R
+## Purpose: Utilizes IPUMS API to acquire 2023 ASEC data with socioeconomic
+##          stability indicators identified in the 2023 ASEC Codebook.
+## Author: Janica Murphy, Max Goshert, EPAG / Gemini
+## Date Created: 2026-01-08
+## Dependencies: ipumsr, dplyr, here, purrr, stringr
+# ==== 0. SETUP ====
+rm(list = ls()); gc()
+library(ipumsr); library(dplyr); library(here); library(purrr); library(stringr)
+# Load shared utilities for group assignment logic
+source(here::here("02_Scripts", "II- Shared Functions", "II-A Shared Utilities.r"))
+# ================================================================= #
+# ==== 1. USER INPUTS: CONFIGURE YOUR DATA DOWNLOAD ====
+# ================================================================= #
+USER_INDICATOR_NAME    <- "Stability_Mosaic_2023"
+USER_ASEC_SAMPLE_ID    <- "cps2023_03s"
+# Corrected IPUMS API Variable Names
+USER_ASEC_VARIABLES <- c(
+"SERIAL",    # Household ID [cite: 175]
+"PERNUM",    # Person ID [cite: 207]
+"ASECWT",    # Weight (MARSUPWT equivalent) [cite: 224]
+"HHINCOME",  # Income (HTOTVAL equivalent) [cite: 90]
+"HCOVANY",   # Health Coverage (COV equivalent)
+"OWNERSHP",    # Asset Security (H_TENURE equivalent)
+"INCPENS",   # Pension/Retirement Access [cite: 711]
+"ANYCOV",  # Passive Wealth Receipt [cite: 93]
+"EDUC",      # Education (A_HGA equivalent)
+"ASECWTH"    # Household Weight (for Tercile alignment)
+)
+# ================================================================= #
+# ==== 2. API EXECUTION LOGIC ====
+# ================================================================= #
+# --- 2.1. Define Output Directory ---
+OUTPUT_RAW_DIR <- here::here("01_data", "raw", "IPUMS_Microdata",
+paste0("cps_", USER_INDICATOR_NAME, "_", USER_ASEC_SAMPLE_ID))
+if (!dir.exists(OUTPUT_RAW_DIR)) dir.create(OUTPUT_RAW_DIR, showWarnings = FALSE, recursive = TRUE)
+# --- 2.2. API Data Acquisition Function ---
+acquire_asec_via_api <- function(sample_id, variables, indicator_name) {
+message(paste("\n--- Submitting IPUMS API Request for:", indicator_name, "---"))
+# 1. Define the Extract
+extract_definition <- define_extract_micro(
+collection  = "cps",
+description = paste("1/3 Country Project:", indicator_name),
+samples     = sample_id,
+variables   = variables
+)
+# 2. Submit to IPUMS
+submitted_extract <- submit_extract(extract_definition)
+message(paste("Extract Number:", submitted_extract$number, "submitted successfully."))
+# 3. Wait for server processing
+downloadable_extract <- wait_for_extract(submitted_extract)
+# 4. Download files to raw directory
+downloaded_files <- download_extract(
+downloadable_extract,
+download_dir = OUTPUT_RAW_DIR,
+overwrite    = TRUE
+)
+# 5. Locate DDI file for metadata processing
+ddi_file <- downloaded_files[grep("\\.xml$", downloaded_files)][1]
+# 6. Generate Traceability Codebook
+codebook_path <- file.path(OUTPUT_RAW_DIR, paste0("codebook_", tolower(indicator_name), ".txt"))
+generate_codebook_from_ddi(ddi_file, variables, codebook_path)
+# 7. Read and Save as local RDS
+data <- read_ipums_micro(ddi = ddi_file, verbose = FALSE)
+saveRDS(data, file = file.path(OUTPUT_RAW_DIR, "raw_asec_data.rds"))
+message(paste("SUCCESS: Data and codebook saved to:", OUTPUT_RAW_DIR))
+}
+# --- 2.3. Execute ---
+acquire_asec_via_api(
+sample_id      = USER_ASEC_SAMPLE_ID,
+variables      = USER_ASEC_VARIABLES,
+indicator_name = USER_INDICATOR_NAME
+)
+# ==== 0. ABOUT ====
+## WD location: 02_Scripts/III-Data Prep Templates/CPS/ASEC
+## Script: ASEC_Stability_acquire.R
+## Purpose: Utilizes IPUMS API to acquire 2023 ASEC data with socioeconomic
+##          stability indicators identified in the 2023 ASEC Codebook.
+## Author: Janica Murphy, Max Goshert, EPAG / Gemini
+## Date Created: 2026-01-08
+## Dependencies: ipumsr, dplyr, here, purrr, stringr
+# ==== 0. SETUP ====
+rm(list = ls()); gc()
+library(ipumsr); library(dplyr); library(here); library(purrr); library(stringr)
+# Load shared utilities for group assignment logic
+source(here::here("02_Scripts", "II- Shared Functions", "II-A Shared Utilities.r"))
+# ================================================================= #
+# ==== 1. USER INPUTS: CONFIGURE YOUR DATA DOWNLOAD ====
+# ================================================================= #
+USER_INDICATOR_NAME    <- "Stability_Mosaic_2023"
+USER_ASEC_SAMPLE_ID    <- "cps2023_03s"
+# Corrected IPUMS API Variable Names
+USER_ASEC_VARIABLES <- c(
+"SERIAL",    # Household ID [cite: 175]
+"PERNUM",    # Person ID [cite: 207]
+"ASECWT",    # Weight (MARSUPWT equivalent) [cite: 224]
+"HHINCOME",  # Income (HTOTVAL equivalent) [cite: 90]
+"HMCAID",   # Health Coverage (COV equivalent)
+"HIPRIVATE",   # Health Coverage (COV equivalent)
+"HIMCARE",   # Health Coverage (COV equivalent)
+"OWNERSHP",    # Asset Security (H_TENURE equivalent)
+"INCPENS",   # Pension/Retirement Access [cite: 711]
+"ANYCOV",  # Passive Wealth Receipt [cite: 93]
+"EDUC",      # Education (A_HGA equivalent)
+"ASECWTH"    # Household Weight (for Tercile alignment)
+)
+# ================================================================= #
+# ==== 2. API EXECUTION LOGIC ====
+# ================================================================= #
+# --- 2.1. Define Output Directory ---
+OUTPUT_RAW_DIR <- here::here("01_data", "raw", "IPUMS_Microdata",
+paste0("cps_", USER_INDICATOR_NAME, "_", USER_ASEC_SAMPLE_ID))
+if (!dir.exists(OUTPUT_RAW_DIR)) dir.create(OUTPUT_RAW_DIR, showWarnings = FALSE, recursive = TRUE)
+# --- 2.2. API Data Acquisition Function ---
+acquire_asec_via_api <- function(sample_id, variables, indicator_name) {
+message(paste("\n--- Submitting IPUMS API Request for:", indicator_name, "---"))
+# 1. Define the Extract
+extract_definition <- define_extract_micro(
+collection  = "cps",
+description = paste("1/3 Country Project:", indicator_name),
+samples     = sample_id,
+variables   = variables
+)
+# 2. Submit to IPUMS
+submitted_extract <- submit_extract(extract_definition)
+message(paste("Extract Number:", submitted_extract$number, "submitted successfully."))
+# 3. Wait for server processing
+downloadable_extract <- wait_for_extract(submitted_extract)
+# 4. Download files to raw directory
+downloaded_files <- download_extract(
+downloadable_extract,
+download_dir = OUTPUT_RAW_DIR,
+overwrite    = TRUE
+)
+# 5. Locate DDI file for metadata processing
+ddi_file <- downloaded_files[grep("\\.xml$", downloaded_files)][1]
+# 6. Generate Traceability Codebook
+codebook_path <- file.path(OUTPUT_RAW_DIR, paste0("codebook_", tolower(indicator_name), ".txt"))
+generate_codebook_from_ddi(ddi_file, variables, codebook_path)
+# 7. Read and Save as local RDS
+data <- read_ipums_micro(ddi = ddi_file, verbose = FALSE)
+saveRDS(data, file = file.path(OUTPUT_RAW_DIR, "raw_asec_data.rds"))
+message(paste("SUCCESS: Data and codebook saved to:", OUTPUT_RAW_DIR))
+}
+# --- 2.3. Execute ---
+acquire_asec_via_api(
+sample_id      = USER_ASEC_SAMPLE_ID,
+variables      = USER_ASEC_VARIABLES,
+indicator_name = USER_INDICATOR_NAME
+)

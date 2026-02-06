@@ -1,0 +1,13 @@
+/*
+!/Phase 3/
+!/Phase 4/
+!.gitignore
+.Rproj.user/
+.DS_Store
+*.RData
+*.Rhistory
+*.dat
+*.csv
+*.gz
+*.rds
+*.xml

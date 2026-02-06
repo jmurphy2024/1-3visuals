@@ -1,0 +1,158 @@
+IPUMS Data Extract Codebook
+Source DDI: nhis_00008.xml 
+Generated on: 2025-12-15 15:18:51.629201 
+========================================
+
+## Variable: YEAR ##
+Label: Survey year 
+Description: YEAR is a four-digit variable reporting the calendar year (e.g., 2003) the survey was conducted and the data were collected. YEAR indicates the survey year reported on the household record. 
+Codes and Labels: (Continuous or string variable)
+----------------------------------------
+
+## Variable: SERIAL ##
+Label: Sequential Serial Number, Household Record 
+Description: SERIAL is an IPUMS NHIS-constructed value that is an identifying number unique to each household in a given survey year. The combination of YEAR and SERIAL provides a unique identifier for every household in the IPUMS NHIS database. 
+Codes and Labels: (Continuous or string variable)
+----------------------------------------
+
+## Variable: AGE ##
+Label: Age 
+Description: AGE reports the individual's age, in years since their last birthday. Starting in 2019, "Unknown-refused" and "Unknown-don't know" are allowed responses. Prior to 2019 age is not coded as "unknown" for any persons included in the IPUMS NHIS data. As the public use file's codebooks for 1998-2003 state, "Because age is an important variable for instrument check items and in developing the weights, all respondents must have data on age." 
+Codes and Labels:
+   85: Top code for 85 years or older (1963-1968 and 1997-forward)
+   90: Top code for 90 years or older (1996 only)
+   99: Top code for 99 years or older (1969-1995)
+  997: Unknown-refused
+  998: Unknown-not ascertained
+  999: Unknown-don't know
+----------------------------------------
+
+## Variable: SEX ##
+Label: Sex 
+Description: SEX indicates whether the person was male or female.  
+
+Starting in 2019, "Unknown-refused" and "Unknown-don't know" responses are allowed. Prior to 2019, SEX is not coded as "unknown" for any persons included in the IPUMS NHIS data.
+
+According to the 2020 Survey Description, for some variables, including SEX, the 2020 responses of sample adults that were part of the 2020 longitudinal sample were overwritten with their 2019 responses "to mitigate disclosure risks associated with differences in response from repeated measures among the same Sample Adults" (33). The sample adults' actual 2020 responses can be accessed through a Research Data Center (RDC). For more information on the 2020 longitudinal sample, please see SALNGPRTFLG. 
+Codes and Labels:
+  1: Male
+  2: Female
+  7: Unknown-refused
+  8: Unknown-not ascertained
+  9: Unknown-don't know
+----------------------------------------
+
+## Variable: RACENEW ##
+Label: Self-reported Race (Post-1997 OMB standards) 
+Description: RACENEW provides information on self-reported race of sample adults and sample children (and prior to 2019, all persons), using the October 30, 1997 revision of Statistical Policy Directive No. 15, Race and Ethnic Standards for Federal Statistics and Administrative Reporting. 
+Codes and Labels:
+  100: White only
+  200: Black/African American only
+  300: American Indian/Alaska Native only
+  400: Asian only
+  500: Other Race and Multiple Race
+  510: Other Race and Multiple Race (2019-forward: Excluding American Indian/Alaska Native)
+  520: Other Race
+  530: Race Group Not Releasable
+  540: Multiple Race
+  541: Multiple Race (1999-2018: Including American Indian/Alaska Native)
+  542: American Indian/Alaska Native and Any Other Race
+  997: Unknown-Refused
+  998: Unknown-Not ascertained
+  999: Unknown-Don't Know
+----------------------------------------
+
+## Variable: HISPETH ##
+Label: Hispanic ethnicity 
+Description: HISPETH identifies and classifies persons of Hispanic/Spanish/Latino origin or ancestry. According to the Field Representative's Manual for 1976-1981, "The term 'national origin or ancestry' refers to the national or cultural group from which the person is descended. A person may report his origin based on the origin of a parent, a grandparent, or some far-removed ancestor." The 1982 Field Representative's Manual noted, "There is no set rule as to how many generations are to be taken into account in determining origin."
+
+According to the 2020 Survey Description, for some variables, including HISPETH, the 2020 responses of sample adults that were part of the 2020 longitudinal sample were overwritten with their 2019 responses "to mitigate disclosure risks associated with differences in response from repeated measures among the same Sample Adults" (33). The sample adults' actual 2020 responses can be accessed through a Research Data Center (RDC). For more information on the 2020 longitudinal sample, please see SALNGPRTFLG. 
+Codes and Labels:
+  10: Not Hispanic/Spanish origin
+  20: Mexican
+  21: Mexican-Mexicano
+  22: Mexicano
+  23: Mexican-American
+  24: Chicano
+  30: Puerto Rican
+  40: Cuban/Cuban American
+  50: Dominican (Republic)
+  60: Other Hispanic
+  61: Central or South American
+  62: Other Latin American, type not specified
+  63: Other Spanish
+  64: Hispanic/Latino/Spanish, non-specific type
+  65: Hispanic/Latino/Spanish, type refused
+  66: Hispanic/Latino/Spanish, type not ascertained
+  67: Hispanic/Spanish, type don't know
+  70: Multiple Hispanic
+  90: Unknown
+  91: Unknown if Hispanic/Spanish origin
+  92: Two origins, unknown which is the main
+  93: Origin unknown, refused or not reported
+  99: NIU
+----------------------------------------
+
+## Variable: PERWEIGHT ##
+Label: Final basic annual weight 
+Description: PERWEIGHT is an IPUMS NHIS-constructed variable based on the Final Annual Weight in the original NHIS public use files.  This weight should be used for many analyses at the person level, particularly with variables for which information was collected about all family members. PERWEIGHT represents the inverse probability of selection into the sample, adjusted for non-response with post-stratification adjustments for age, race/ethnicity, and sex using the Census Bureau's population control totals. For each year, the sum of these weights is equal to that year's civilian, non-institutionalized U.S. population.
+
+There are instances, however, when the researcher should use a different person-level weight, particularly with supplements where a random adult or child family member was selected for questioning. For example, researchers analyzing variables from the sample adult/sample child supplements from 1997 forward should use SAMPWEIGHT rather than PERWEIGHT. 
+
+Users  should review the documentation for extracted variables--most notably the "Weights" section toward the top of each variable description--to ascertain which weight is the appropriate choice for a given survey year. See the User Notes on the use of sampling weights for additional information. 
+Codes and Labels: (Continuous or string variable)
+----------------------------------------
+
+## Variable: PSU ##
+Label: Primary sampling unit (PSU) for variance estimation 
+Description: PSU is the primary sampling unit variable that represents the impact of the sample design clustering on the estimates of variance and standard errors. It is constant within a sample design period and changes between sample design periods. For analysis, researchers need to use PSU in conjunction with STRATA to account for stratification and clustering when computing variance estimates with IPUMS NHIS data.  
+
+See the User Notes on variance estimation for additional information.
+
+After the 2019 redesign, there is no longer a sampling weight to produce household population estimates. See the user note on the calculation and use of sampling weights for additional information. 
+Codes and Labels:
+  0: Not in Universe
+----------------------------------------
+
+## Variable: STRATA ##
+Label: Stratum for variance estimation 
+Description: STRATA is an IPUMS NHIS-constructed variable based on the NHIS sample design variables in the public use files concatenated with a sample design period indicator. STRATA represents the impact of the sample design stratification on the estimates of variance and standard errors. It is constant within a sample design period and changes between sample design periods. For analysis, researchers need to use STRATA in conjunction with PSU to account for stratification and clustering when computing variance estimates with IPUMS NHIS data.
+
+See the User Notes on variance estimation for additional information.     
+
+After the 2019 redesign, there is no longer a sampling weight to produce household population estimates. See the user note on the calculation and use of sampling weights for additional information. 
+Codes and Labels:
+  0: Not in Universe
+----------------------------------------
+
+## Variable: HINOTCOVE ##
+Label: Health Insurance coverage status 
+Description: For sample adults and sample children, HINOTCOVE indicates whether the person currently lacks health insurance coverage. Prior to 2019, this variable is available for all persons.
+
+HINOTCOVE is a recoded variable created by the National Center for Health Statistics (NCHS) and included in the original NHIS public use data.   HINOTCOVE, like other recoded health insurance variables in these data, is based on responses to a series of questions and on back editing carried out by NCHS staff.  For the 1997 sample only, HINOTCOVE is constructed by IPUMS NHIS staff using back edited variables from the original NHIS public use data. The component variables used by IPUMS NHIS staff are available in IPUMS NHIS as HIPRIVATEE, HIMILITE, HIMCAIDE, HIMCAREE, HICHIPE, HISTATEE, and HIOTHGOVE. 
+Codes and Labels:
+  0: NIU
+  1: No, has coverage
+  2: Yes, has no coverage
+  7: Unknown-refused
+  8: Unknown-not ascertained
+  9: Unknown-don't know
+----------------------------------------
+
+## Variable: INCFAM07ON ##
+Label: Total combined family income (2007+) 
+Description: For sample adults and sample children, INCFAM07ON provides total grouped family income using an income bracket methodology introduced in 2007. Responses are reported in nominal dollars and have not been adjusted for inflation. Prior to 2019, INCFAM07ON was asked of all persons.
+&nbsp;Starting with the 2007 NHIS, the income amount follow-up questions that had been in place since 1997 were replaced with a series of unfolding bracket questions. The unfolding bracket method asked a series of closed-ended income range questions (e.g., "Is it less than $50,000?") if the respondent did not provide an answer to the exact income amount question. The closed-ended income range questions were constructed so that each successive question establishes a smaller range for the amount of the family's income. 
+Codes and Labels:
+  10: $0 - $49,999 (no further detail)
+  11: $0 - $34,999
+  12: $35,000 - $49,999
+  20: $50,000  and over (no further detail; available 2007-2013)
+  21: $50,000 - $99,999 (no further detail)
+  22: $50,000 - $74,999
+  23: $75,000 - $99,999
+  24: $100,000 and over
+  96: Undefined
+  99: Unknown
+----------------------------------------
+

@@ -1,0 +1,221 @@
+IPUMS Data Extract Codebook
+Source DDI: cps_00166.xml 
+Generated on: 2026-01-02 15:00:18.275683 
+========================================
+
+## Variable: SERIAL ##
+Label: Household serial number 
+Description: SERIAL is an identifying number unique to each household in a given survey month and year.  All person records are assigned the same serial number as the household record they follow.  A combination of YEAR, MONTH, and SERIAL provides a within-sample unique identifier for every household in IPUMS-CPS; YEAR, MONTH, SERIAL, and PERNUM uniquely identify every person within a single sample.
+
+SERIAL is a new value generated for IPUMS-CPS and should not be confused with the household serial number created by the Census Bureau and included in the original CPS data. 
+Codes and Labels: (Continuous or string variable)
+----------------------------------------
+
+## Variable: PERNUM ##
+Label: Person number in sample unit 
+Description: PERNUM numbers all persons within each household consecutively (starting with "1") in the order in which they are listed in the original CPS data.  When combined with YEAR , MONTH, and SERIAL, PERNUM uniquely identifies each person within IPUMS-CPS samples, though not across IPUMS-CPS samples. 
+Codes and Labels: (Continuous or string variable)
+----------------------------------------
+
+## Variable: ASECWTH ##
+Label: Annual Social and Economic Supplement Household weight 
+Description: ASECWTH is a household-level weight that should be used to generate statistics about households in March Annual Social and Economic (ASEC) Supplement data. The CPS uses a complex stratified sampling scheme, and ASECWTH must be used to produce unbiased household-level statistics from the IPUMS-CPS ASEC data. For analyses of non-ASEC data, researchers should use HWTFINL. For individual-level analyses, researchers should use WTFINL, ASECWT, or EARNWT. 
+
+ASECWTH generally has the same value as WTSUPP for the household head or reference person. Vacant housing units and households that could not be interviewed due to residents' absence or refusal to participate have a value of zero in HWTSUPP; such sampled units were included in the public use CPS data beginning in 1988. 
+
+Estimates on the entire population are prepared by projecting forward the resident population from the last available census. These projections are derived by updating the demographic census data from a number of other data sources that account for death, births and net migration. About 3 years after every census (i.e. 2003 for the 2000 Census and 2013 for the 2010 Census), the Census Bureau updates its independent population control and provides a new weight for the relevant years.
+
+Two important points should be noted here. First, the lag between when the Census is conducted and when the CPS weights are updated is about 3 years. While the Census data are being processed, the CPS files are made available using the weighting scheme from the US Census prior to the latest Census. Second, once the files are updated, the old weights become obsolete and are replaced in the IPUMS data extract system. Published estimates from the lag years that use the old weights are not always updated. For example, 2010 poverty estimates were released in ASEC using the 2000 population controls. Once the 2010 population controls were made available, IPUMS-CPS replaced the ASEC 2010, 2011, and 2012 weights that are based on the 2000 population control with weights that are based on the 2010 population controls.
+
+IPUMS-CPS makes available only the most up-to-date weights. The old values are available here: Old SPM and Weights Values. 
+Codes and Labels: (Continuous or string variable)
+----------------------------------------
+
+## Variable: ASECWT ##
+Label: Annual Social and Economic Supplement Weight 
+Description: ASECWT is a person-level weight that should be used in analyses of individual-level CPS supplement data. Since the CPS relies on a complex stratified sampling scheme, it is essential to use one of the provided weighting variables.
+
+Researchers should use WTFINL rather than ASECWT when they wish to conduct person-level analyses of non-ASEC data. EARNWT should be used for any analysis including a small number of person-level variables (EARNWEEK, HOURWAGE, PAIDHOUR, and UNION). Researchers should use ASECWTH for household-level analyses. ASECWTCVD is available for the 2020 ASEC to adjust for nonrandom nonresponse resulting from the COVID-19 pandemic.
+
+User Caution: For analyses that include the 2014 ASEC sample, please see the comparability tab.
+
+The ASEC CPS files include two groups of people who are not included in the production of published labor force statistics: (1) members of the armed services, and (2) members of the Hispanic oversample who were interviewed in months other than March. WTFINL and EARNWT assign these groups a value of 0. Both groups are assigned non-zero values in ASECWT.
+
+ASECWT is based on the inverse probability of selection into the sample and adjustments for the following factors: failure to obtain an interview; sampling within large sample units; the known distribution of the entire population according to age, sex, and race; over-sampling Hispanic persons; to give husbands and wives the same weight; and an additional step to provide consistency with labor force estimates from the basic survey. 
+
+Estimates on the entire population are prepared by projecting forward the resident population from the last available census. These projections are derived by updating the demographic census data from a number of other data sources that account for death, births and net migration. About 3 years after every census (i.e. 2003 for the 2000 Census and 2013 for the 2010 Census), the Census Bureau updates its independent population control and provides a new weight for the relevant years.
+
+Two important points should be noted here. First, the lag between when the Census is conducted and when the CPS weights are updated is about 3 years. While the Census data are being processed, the CPS files are made available using the weighting scheme from the US Census prior to the latest Census. Second, once the files are updated, the old weights become obsolete and are replaced in the IPUMS data extract system. Published estimates from the lag years that use the old weights are not always updated. For example, 2010 poverty estimates were released in ASEC using the 2000 population controls. Once the 2010 population controls were made available, IPUMS-CPS replaced the ASEC 2010, 2011, and 2012 weights that are based on the 2000 population control with weights that are based on the 2010 population controls. IPUMS-CPS makes available only the most up-to-date weights. 
+Codes and Labels: (Continuous or string variable)
+----------------------------------------
+
+## Variable: HHINCOME ##
+Label: Total household income 
+Description: HHINCOME reports the total money income during the previous calendar year of all adult household members.  The amount should equal the sum of all household members' individual incomes as recorded in the IPUMS-CPS variable INCTOT.  The persons included were those present in the household at the time of the survey.  People who lived in the household during the previous year but were not still living there at the time of the survey are not included; household members who lived elsewhere during the previous year but had joined the household at the time of the survey are included. 
+Codes and Labels:
+  1e+08: N.I.U. (Not in Universe).
+----------------------------------------
+
+## Variable: AGE ##
+Label: Age 
+Description: Age gives each person's age at last birthday. 
+Codes and Labels:
+   0: Under 1 year
+  90: 90 (90+, 1988-2002)
+  99: 99+
+----------------------------------------
+
+## Variable: RACE ##
+Label: Race 
+Description: Racial categories in the CPS have been more consistent than racial categories in the census.  Up through 2002, the number of race categories ranged from 3 (white, negro, and other) to 5 (white, black, American Indian/Eskimo/Aleut, Asian or Pacific Islander, and other).   Beginning in 2003, respondents could report more than one race, and the number of codes rose to 21, and then up to 26 codes in 2013. 
+Codes and Labels:
+  100: White
+  200: Black
+  300: American Indian/Aleut/Eskimo
+  650: Asian or Pacific Islander
+  651: Asian only
+  652: Hawaiian/Pacific Islander only
+  700: Other (single) race, n.e.c.
+  801: White-Black
+  802: White-American Indian
+  803: White-Asian
+  804: White-Hawaiian/Pacific Islander
+  805: Black-American Indian
+  806: Black-Asian
+  807: Black-Hawaiian/Pacific Islander
+  808: American Indian-Asian
+  809: Asian-Hawaiian/Pacific Islander
+  810: White-Black-American Indian
+  811: White-Black-Asian
+  812: White-American Indian-Asian
+  813: White-Asian-Hawaiian/Pacific Islander
+  814: White-Black-American Indian-Asian
+  815: American Indian-Hawaiian/Pacific Islander
+  816: White-Black--Hawaiian/Pacific Islander
+  817: White-American Indian-Hawaiian/Pacific Islander
+  818: Black-American Indian-Asian
+  819: White-American Indian-Asian-Hawaiian/Pacific Islander
+  820: Two or three races, unspecified
+  830: Four or five races, unspecified
+  999: Blank
+----------------------------------------
+
+## Variable: HISPAN ##
+Label: Hispanic origin 
+Description: HISPAN identifies and classifies persons of Hispanic/Spanish/Latino origin.  Origin is ancestry, lineage, heritage, national group, or country of birth.   
+
+Prior to 2003, information was collected by asking, "What is the origin or descent of each person in this household?" and asking the respondent to select the appropriate category from a limited number of choices on a flashcard (including "another group not listed.")   The choices included five to eight choices that would be classified as Hispanic, "Negro" and "Black," and a small number of European ancestry groups such as "German."  
+
+The primary intention of the question was to identify Hispanic respondents, rather than origin or descent for the general population.  Beginning in 1976, the original CPS data preserved detail for only the Hispanic responses, with all others answers lumped together as "another group not listed" (relabeled "Not Hispanic" in IPUMS-CPS). 
+
+In 2003 and later years, respondents were asked, "Are you Spanish, Hispanic, or Latino?" rather than the broad query about origin or descent.  Detailed information about Hispanic ethnicity was collected only from those who answered "yes" to this initial question. 
+Codes and Labels:
+    0: Not Hispanic
+  100: Mexican
+  102: Mexican American
+  103: Mexicano/Mexicana
+  104: Chicano/Chicana
+  108: Mexican (Mexicano)
+  109: Mexicano/Chicano
+  200: Puerto Rican
+  300: Cuban
+  400: Dominican
+  500: Salvadoran
+  600: Other Hispanic
+  610: Central/South American
+  611: Central American, (excluding Salvadoran)
+  612: South American
+  901: Do not know
+  902: N/A (and no response 1985-87)
+----------------------------------------
+
+## Variable: EMPSTAT ##
+Label: Employment status 
+Description: EMPSTAT indicates whether persons were part of the labor force--working or seeking work--and, if so, whether they were currently unemployed. The variable also provides information on the activity (e.g., doing housework, attending school,) or status (e.g., retired, unable to work) of persons not in the labor force, as well as limited additional information on those who are in the labor force (e.g. members of the Armed Forces, those with a job, but not at work last week). See LABFORCE for a dichotomous variable identifying whether a person participated in the labor force.
+
+In the CPS, individuals' employment status was determined on the basis of answers to a series of questions relating to their activities during the preceding week.  Those who reported doing any work at all for pay or profit, or working at least fifteen hours without pay in a family business or farm, were classified as "at work."  Those who did not work during the previous week but who acknowledged having a job or business from which they were temporarily absent (e.g., due to illness, vacation, bad weather, or labor dispute) were also classified as employed, under the heading "has job, not at work last week."
+
+Because the CPS is designed to measure unemployment in the civilian population, the original employment status variable in the survey classifies members of the armed forces as NIU (Not in universe).
+
+Unemployed persons make up the third element of the labor force.  Individuals were coded as unemployed if they did no work for pay or profit, did not have a job from which they were briefly absent, and either reported looking for work as their major activity during the previous week (for 1962 through 1993) or answered yes to a question about whether they had been looking for work in the past four weeks. People who were temporarily laid off from a job were also classified as unemployed. A separate CPS variable specifying whether an unemployed person had worked before or was looking for a first job was used to distinguish between "experienced" and "inexperienced" unemployed persons in IPUMS CPS.
+
+Persons who were neither employed nor unemployed fall into the residual category, "not in labor force."  Such individuals might be retired, disabled due to an illness lasting at least 6 months, occupied with other activities such as attending school or keeping house, or convinced that they are unlikely to find employment (discouraged workers). 
+Codes and Labels:
+   0: NIU
+   1: Armed Forces
+  10: At work
+  12: Has job, not at work last week
+  20: Unemployed
+  21: Unemployed, experienced worker
+  22: Unemployed, new worker
+  30: Not in labor force
+  31: NILF, housework
+  32: NILF, unable to work
+  33: NILF, school
+  34: NILF, other
+  35: NILF, unpaid, lt 15 hours
+  36: NILF, retired
+----------------------------------------
+
+## Variable: WHYPTLWK ##
+Label: Reason for working part time last week 
+Description: WHYPTLWK reports the reason why respondents worked part-time (a total of less than 35 hours combined for all jobs) during the previous week.   Some of these individuals normally worked a part-time job; others usually worked full-time but worked less than 35 hours during the week in question. These two groups can be identified using USFTPTLW, which reports whether persons who worked part-time (less than 35 hours) during the preceding week usually worked full-time (35 hours or more).     
+
+The total number of hours the respondent worked during the previous week is reported in AHRSWORKT.  WHYPTLYreports the reason why respondents worked part-time (less than 35 hours) for at least one week during the previous calendar year. 
+Codes and Labels:
+    0: NIU
+    1: No response
+   10: Slack work, business conditions
+   11: Material shortage
+   12: Plant or machine repairs
+   20: Seasonal work
+   30: Weather affected job
+   40: Labor dispute
+   50: job started/ended during week
+   51: New job started
+   52: Job terminated
+   60: Could only find part-time
+   70: Not want full time work
+   71: Retired/SS limit on earnings
+   80: Full time work week under 35 hours
+   81: Full time peak season only
+   90: Holiday
+  100: Own illness
+  101: Health/medical limitation
+  110: On vacation
+  111: Vacation/personal day
+  120: Too busy with house, school, etc
+  121: Child care problems
+  122: Other family/personal obligations
+  123: School/training
+  124: Civic/military duty
+  130: Other
+----------------------------------------
+
+## Variable: WKSTAT ##
+Label: Full or part time status 
+Description: WKSTAT is a recode from the Census Bureau that states the part-time or full-time employment status for the respondent, and reasons.  It is derived from a number of labor force questions asked in the monthly questionnaire. 
+Codes and Labels:
+  10: Full-time schedules
+  11: Full-time hours (35+), usually full-time
+  12: Part-time for non-economic reasons, usually full-time
+  13: Not at work, usually full-time
+  14: Full-time hours, usually part-time for economic reasons
+  15: Full-time hours, usually part-time for non-economic reasons
+  20: Part-time for economic reasons
+  21: Part-time for economic reasons, usually full-time
+  22: Part-time hours, usually part-time for economic reasons
+  40: Part-time for non-economic reasons, usually part-time
+  41: Part-time hours, usually part-time for non-economic reasons
+  42: Not at work, usually part-time
+  50: Unemployed, seeking full-time work
+  60: Unemployed, seeking part-time work
+  99: NIU, blank, or not in labor force
+----------------------------------------
+
+## Variable: MARBASECIDP ##
+Label: Unique identifier for linking March Basic to ASEC 
+Description: MARBASECIDP is an IPUMS-CPS created ID for merging person records from the ASEC to their corresponding data on the March Basic file. MARBASECIDP is only useful for linking within a given year. For more information, see Flood and Pacas, 2017 and Flood et al., 2020. 
+Codes and Labels: (Continuous or string variable)
+----------------------------------------
+

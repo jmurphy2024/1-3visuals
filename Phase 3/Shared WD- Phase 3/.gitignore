@@ -1,0 +1,15 @@
+# Ignore large data files
+*.csv
+*.rda
+*.rds
+*.zip
+*.gz
+*.xml
+*.dat
+
+
+# Ignore R/Mac system files
+.DS_Store
+.Rhistory
+.RData
+.Rproj.user/

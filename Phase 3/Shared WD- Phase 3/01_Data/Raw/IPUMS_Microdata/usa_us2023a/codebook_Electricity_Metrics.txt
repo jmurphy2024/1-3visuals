@@ -1,0 +1,158 @@
+IPUMS Data Extract Codebook
+Source DDI: usa_00175.xml 
+Generated on: 2026-01-27 09:34:27.502533 
+========================================
+
+## Variable: SERIAL ##
+Label: Household serial number 
+Description: SERIAL is an identifying number unique to each household record in a given sample. All person records are assigned the same serial number as the household record that they follow. (Person records also have their own unique identifiers - see PERNUM.) A combination of SAMPLE and SERIAL provides a unique identifier for every household in the IPUMS; the combination of SAMPLE, SERIAL, and PERNUM uniquely identifies every person in the database.
+
+For 1850-1930, households that are part of a multi-household dwelling can be identified by using the DWELLING and DWSEQ variables. See "Sample Designs" for further discussion of sampling from within multi-household dwellings. 
+Codes and Labels: (Continuous or string variable)
+----------------------------------------
+
+## Variable: HHWT ##
+Label: Household weight 
+Description: HHWT indicates how many households in the U.S. population are represented by a given household in an IPUMS sample. 
+
+It is generally a good idea to use HHWT when conducting a household-level analysis of any IPUMS sample. The use of HHWT is optional when analyzing one of the "flat" or unweighted IPUMS samples. Flat IPUMS samples include the 1% samples from 1850-1930, all samples from 1960, 1970, and 1980, the 1% unweighted samples from 1990 and 2000, the 10% 2010 sample, and any of the full count 100% census datasets. HHWT must be used to obtain nationally representative statistics for household-level analyses of any sample other than those.
+
+Users should also be sure to select one person (e.g., PERNUM = 1) to represent the entire household.
+
+For further explanation of the sample weights, see "Sample Designs" and "Sample Weights". See also PERWT for a corresponding variable at the person level, and SLWT for a weight variable used with sample-line records in 1940 1% and 1950. 
+Codes and Labels: (Continuous or string variable)
+----------------------------------------
+
+## Variable: PERWT ##
+Label: Person weight 
+Description: PERWT indicates how many persons in the U.S. population are represented by a given person in an IPUMS sample. 
+
+It is generally a good idea to use PERWT when conducting a person-level analysis of any IPUMS sample. The use of PERWT is optional when analyzing one of the "flat" or unweighted IPUMS samples. Flat IPUMS samples include the 1% samples from 1850-1930, all samples from 1960, 1970, and 1980, the 1% unweighted samples from 1990 and 2000, the 10% 2010 sample, and any of the full count 100% census datasets. PERWT must be used to obtain nationally representative statistics for person-level analyses of any sample other than those.
+
+For further explanation of the sample weights, see "Sample Designs" and "Sample Weights". See also HHWT for a corresponding variable at the household level, and SLWT for a weight variable used with sample-line records in 1940 and 1950. 
+Codes and Labels: (Continuous or string variable)
+----------------------------------------
+
+## Variable: COSTELEC ##
+Label: Annual electricity cost 
+Description: COSTELEC reports the annual electricity cost for each housing unit (rented or owned), excluding contract rent or other types of payments.
+
+Amounts are expressed in contemporary dollars, and users studying change over time must adjust for inflation (See INCTOT for Consumer Price Index adjustment factors). The exception is the ACS/PRCS multi-year files, where all dollar amounts have been standardized to dollars as valued in the final year of data included in the file (e.g., 2007 dollars for the 2005-2007 3-year file). Additionally, more detail may be available than exists in the original ACS samples.
+
+COSTELEC amounts for renters are part of RENTGRS. Census Bureau research comparing respondents' reported costs with utility company records indicates that respondents tend to overstate their costs.
+
+In 1970, COSTELEC only reported annual electricity cost for each rented housing unit, excluding contract rent payments. At this time, the universe for the U.S. Census samples specified renter-occupied units rented for cash rent, not one-family houses on 10+ acres and not group quarters; however, in the Puerto Rican census of 1970, this specification is for renter-occupied units rented for cash rent, not one-family houses on 3+ cuerdas, and not group quarters. For 1970 and 1980, units within the universe that used no electricity can be identified. Beginning in 1990, the survey questionnaire combines the categories "no charge" and "no electricity used."
+
+User Note: ACS respondents are surveyed throughout the year, and amounts do not reflect calendar year dollars. While the Census Bureau provides an adjustment factor (available in ADJUST), this is an imperfect solution. See the ACS income variables note for further details.
+
+Note about Puerto Rico land areas:
+The traditional unit of land area in Puerto Rico is the cuerda. The cuerda is equal to about 3930 square meters, 4700 square yards, or 0.971 acres. Because the cuerda and the acre are so close to being equal, they are often treated informally as being equal. Mainlanders sometimes call the unit the "Spanish Acre." IPUMS has preserved the units for the mainland U.S. as acres and Puerto Rico as cuerdas. 
+Codes and Labels:
+      0: N/A
+      2: 1 or $2 (2000)
+  99993: No charge or no electricity used (1990, 2000, 2003-onward ACS/PRCS)
+  99994: Electricity not used (1970, 1980)
+  99995: Electricity included in rent or no charge (1980)
+  99996: Electricity included in rent (1970)
+  99997: Electricity included in rent or in condo fee (1990, 2000, 2003-onward ACS/PRCS)
+  99998: No charge, no electricity used, or electricity included in rent or condo fee (2000-2002 ACS)
+----------------------------------------
+
+## Variable: KITCHEN ##
+Label: Kitchen or cooking facilities 
+Description: KITCHEN indicates whether the housing unit contained kitchen facilities. 
+Codes and Labels:
+  0: N/A
+  1: No
+  2: No, or shared use
+  3: Yes, shared use
+  4: Yes (shared or exclusive use)
+  5: Yes, exclusive use
+----------------------------------------
+
+## Variable: FUELHEAT ##
+Label: Home heating fuel 
+Description: FUELHEAT reports the primary fuel or energy source used to heat the housing unit. Respondents living in unheated units were to respond "no fuel used." The 1980 form mentioned "purchased steam, fuel briquettes, waste material" as examples of "other fuel."  
+
+In 1960, not all households received this question, and only 20 percent of cases in the IPUMS include the question. Such cases accurately represent proportional distributions but not correct absolute numbers for the total population. See SAMP1960 for instructions on making appropriate corrections to derive absolute numbers for the total population. 
+Codes and Labels:
+  0: N/A
+  1: No fuel used
+  2: Utility gas from  underground pipes serving neighborhood
+  3: Bottled or tank gas (propane, butane, etc.)
+  4: Electricity
+  5: Fuel oil, kerosene, other liquid fuels
+  6: Coal or coke
+  7: Wood
+  8: Solar energy
+  9: Other
+----------------------------------------
+
+## Variable: HHINCOME ##
+Label: Total household income  
+Description: HHINCOME reports the total money income of all household members age 15+ during the previous year. The amount should equal the sum of all household members' individual incomes, as recorded in the person-record variable INCTOT. The persons included were those present in the household at the time of the census or survey. People who lived in the household during the previous year but who were no longer present at census time are not included, and members who did not live in the household during the previous year but who had joined the household by the time of the census or survey, are included. For the census, the reference period is the previous calendar year; for the ACS and the PRCS, it is the previous 12 months. 
+
+Note that household income differs from family income, which is reported in FTOTINC. The family income variable only reports the incomes of household members related to the head, while HHINCOME includes the incomes of all household members. 
+
+Amounts are expressed in contemporary dollars, and users studying change over time must adjust for inflation (See INCTOT for Consumer Price Index adjustment factors).  The exception is the ACS/PRCS multi-year files, where all dollar amounts have been standardized to dollars as valued in the final year of data included in the file (e.g., 2007 dollars for the 2005-2007 3-year file). Additionally, more detail may be available than exists in the original ACS samples. 
+
+Inflation-adjusted versions of this variable created with the Adjust Monetary Values tool will use the default reference year for the sample (i.e., survey year [YEAR] for ACS and previous year [YEAR-1] for decennials).
+
+User Note: ACS respondents are surveyed throughout the year, and amounts do not reflect calendar year dollars. While the Census Bureau provides an adjustment factor (available in ADJUST), this is an imperfect solution. See the ACS income variables note for further details. 
+Codes and Labels:
+  9999999: N/A 
+----------------------------------------
+
+## Variable: AGE ##
+Label: Age 
+Description: AGE reports the person's age in years as of the last birthday. 
+Codes and Labels:
+    0: Less than 1 year old
+   90: 90 (90+ in 1980 and 1990)
+  100: 100 (100+ in 1960-1970)
+  112: 112 (112+ in the 1980 internal data)
+  115: 115 (115+ in the 1990 internal data)
+  999: Missing
+----------------------------------------
+
+## Variable: RACE ##
+Label: Race [general version] 
+Description: The concept of race has changed over the more than 150 years represented in IPUMS. Currently, the Census Bureau and others consider race to be a sociopolitical construct, not a scientific or anthropological one. Many detailed RACE categories consist of national origin groups. With the exception of the 1970-1990 Puerto Rican censuses, RACE was asked of every person in all years. 
+
+Beginning in 2000, the race question changed substantially to allow respondents to report as many races as they felt necessary to describe themselves. In earlier years, only one race response was coded. Beginning in 2020, the Census Bureau updated the questionnaire text, processing, and coding of the race and Hispanic origin questions, resulting in major changes to the distribution of race and Hispanic origin categories. As a result, users should proceed with caution when comparing RACE and HISPAN in 2019-prior samples with 2020-onward samples. More improvements made to the race question in 2020 were implemented in 2023. See the comparability tab for more details. 
+
+IPUMS offers several variables describing the answer(s) to the race question. RACE provides the full detail given by the respondent and/or released by the Census Bureau; it is not always historically compatible (see comparability discussion below). Users primarily interested in historical compatibility should consider using RACHSING. RACHSING codes race and Hispanic origin responses into a simple, historically compatible scheme that includes only federally defined race and Hispanic origin groups. Please note that RACESING, an earlier version of RACHSING, is also available on the IPUMS website. 
+
+In addition, specific combinations of major races can be discerned using the following bivariate indicators of whether a particular race group was reported: RACAMIND, RACASIAN, RACBLK, RACOTHER, RACPACIS, and RACWHT. RACNUM indicates the total number of major race groups reported for an individual. The information contained in the bivariate indicators and in RACNUM is integrated into the detailed version of RACE. 
+
+Prior to 1960, the census enumerator was responsible for categorizing persons and was not specifically instructed to ask the individual his or her race. In 1970 and later years, an individual's race was reported by someone in the household or group quarters. In the 1990 U.S. census, the 2000 U.S. and Puerto Rican censuses, the ACS, and the PRCS respondents were specifically asked what race the person "considers himself/herself" to be, although such self-description was more or less operative since 1960.
+
+User Note: Race questions were not asked in the Puerto Rican censuses of 1970, 1980, and 1990.  They were asked in the 1910 and 1920 Puerto Rican censuses, the 2000-2010 Puerto Rican censuses, and the PRCS. 
+Codes and Labels:
+  1: White
+  2: Black/African American
+  3: American Indian or Alaska Native
+  4: Chinese
+  5: Japanese
+  6: Other Asian or Pacific Islander
+  7: Other race, nec
+  8: Two major races
+  9: Three or more major races
+----------------------------------------
+
+## Variable: HISPAN ##
+Label: Hispanic origin [general version] 
+Description: HISPAN identifies persons of Hispanic/Spanish/Latino origin and classifies them according to their country of origin when possible. Origin is defined by the Census Bureau as ancestry, lineage, heritage, nationality group, or country of birth. People of Hispanic origin may be of any race; see RACE for a discussion of coding issues involved.  Users should note that race questions were not asked in the Puerto Rican censuses of 1970, 1980 and 1990.  They were asked in the 1910 and 1920 Puerto Rican censuses, and in the 2000 and 2010 Puerto Rican census and the PRCS.  However, questions assessing Spanish/Hispanic origin were not asked in the Puerto Rican censuses prior to 2000. 
+
+The HISPAN general code covers country-of-origin classifications common to all years; the detailed code distinguishes additional groups and subgroups. See HISPRULE for details on how country of origin information was assigned prior to 1980. 
+
+In 2020, the Census Bureau updated the questionnaire text, processing, and coding of the race and Hispanic origin questions, resulting in major changes to the distribution of race and Hispanic origin categories. As a result, users should proceed with caution when comparing HISPAN and RACE in 2019-prior samples with 2020-onward samples. See the comparability tab for more details. 
+Codes and Labels:
+  0: Not Hispanic
+  1: Mexican
+  2: Puerto Rican
+  3: Cuban
+  4: Other
+  9: Not Reported
+----------------------------------------
+

@@ -1,0 +1,228 @@
+IPUMS Data Extract Codebook
+Source DDI: cps_00174.xml 
+Generated on: 2026-01-05 15:26:36.126133 
+========================================
+
+## Variable: SERIAL ##
+Label: Household serial number 
+Description: SERIAL is an identifying number unique to each household in a given survey month and year.  All person records are assigned the same serial number as the household record they follow.  A combination of YEAR, MONTH, and SERIAL provides a within-sample unique identifier for every household in IPUMS-CPS; YEAR, MONTH, SERIAL, and PERNUM uniquely identify every person within a single sample.
+
+SERIAL is a new value generated for IPUMS-CPS and should not be confused with the household serial number created by the Census Bureau and included in the original CPS data. 
+Codes and Labels: (Continuous or string variable)
+----------------------------------------
+
+## Variable: CPSIDP ##
+Label: CPSID, person record 
+Description: CPSIDP is an IPUMS CPS defined variable that uniquely identifies individuals across CPS samples. The first six digits of CPSIDP index the four-digit year and two-digit month that the household was first in the CPS. CPSIDP allows users to link a respondent appearing with a designated household roster line number (LINENO) across samples, based on the 4-8-4 rotation pattern, by assigning a unique CPSIDP value to this line number. CPSIDP will only ever appear for a maximum of 8 times, which is the number of times a household may be observed in the CPS survey (as indexed by MISH). In some cases, individuals will appear fewer than 8 times due to migration, mortality, non-response, and recording errors. Extensive documentation about the creation of CPSIDP is available elsewhere.
+
+To get started using CPSIDP, users may want to sort their data file by CPSIDP and MISH to create a person-time file.
+
+Users should note that it is important to verify CPSIDP linkages with AGE, SEX, and RACE. In some cases CPSIDP will result in erroneous links, which are due to errors in the source data. Cases with the same CPSIDP value may also have inconsistent responses across samples due to errors on the part of the respondent or in recording the response. Ultimately, it is up to the individual researcher to determine the acceptability of the linkages made using CPSIDP. IPUMS CPS also offers CPSIDV which creates linkages across months that have been validated based on demographic characteristics.
+
+CPSIDP may also be used to link ASEC respondents who are in the March Basic Monthly file to other months of CPS data. This linking is made possible by IPUMS through the creation of MARBASECIDP. For further information about the relationship between the March Basic and the ASEC, please see our additional documentation.
+
+Respondents who are part of the ASEC oversample (as indicated by ASECOVERP) may also be linked across ASEC samples, but not to the March or any other Basic Monthly sample. Note also that MISH is not a reliable indicator of rotation pattern status for ASEC oversample records and should not be used to validate matches. For further information on linking records across ASEC samples, please see our additional documentation. 
+Codes and Labels: (Continuous or string variable)
+----------------------------------------
+
+## Variable: EDSUPPWT ##
+Label: Education Supplement Weight 
+Description: EDSUPPWT is the weight specific to the Education Supplement, and should be used for all analyses using variables from this supplement.
+
+A unique supplement weight for the education supplement does not exist from 1976-1980 or from 1994-2005. In these years, EDSUPPWT is the same as WTFINL for education supplements. The October 2012 sample includes two supplements: Education and Computer and Internet Use. Use EDSUPPWT to tally the Education supplement. 
+Codes and Labels: (Continuous or string variable)
+----------------------------------------
+
+## Variable: FAMINC ##
+Label: Family income of householder 
+Description: FAMINC reports annual family income, in categories, of all persons related to the head of household/householder. For individuals who are not part of the householder's family, FAMINC reports the value for the householder's family. 
+
+This measure includes the income of all members of the household who are 15 years of age or older.  Income includes money from jobs; net income from business, farm or rent; pensions; dividends; interest; Social Security payments; and any other monetary income received by family members.
+
+Family income is collected as part of the basic monthly survey. At the end of the monthly labor force survey, respondents are asked to choose the category that represents the total combined income during the past 12 months for all members of the householder's family. The questionnaire says that "This includes money from jobs, net income from business, farm or rent, pensions, dividends, interest, social security payments and any other money income received" by members of the householder's family who are 15 years of age or older. Available categories change over time. 
+Codes and Labels:
+  100: Under $5,000
+  110: Under $1,000
+  111: Under $500
+  112: $500 - 999
+  120: $1,000 - 1,999
+  121: $1,000 - 1,499
+  122: $1,500-1,999
+  130: $2,000 - 2,999
+  131: $2,000 - 2,499
+  132: $2,500 - 2,999
+  140: $3,000 - 3,999
+  141: $3,000 - 3,499
+  142: $3,500 - 3,999
+  150: $4,000 - 4,999
+  200: $5,000 - 7,999
+  210: $5,000 - 7,499
+  220: $5,000 - 5,999
+  230: $6,000 - 7,999
+  231: $6,000 - 7,499
+  232: $6,000 - 6,999
+  233: $7,000 - 7,499
+  234: $7,000 - 7,999
+  300: $7,500 - 9,999
+  310: $7,500 - 7,999
+  320: $8,000 - 8,499
+  330: $8,500 - 8,999
+  340: $8,000 - 8,999
+  350: $9,000 - 9,999
+  400: $10,000 - 14,999
+  410: $10,000 - 10,999
+  420: $11,000 - 11,999
+  430: $10,000 - 12,499
+  440: $10,000 - 11,999
+  450: $12,000 - 12,999
+  460: $12,000 - 14,999
+  470: $12,500 - 14,999
+  480: $13,000 - 13,999
+  490: $14,000 - 14,999
+  500: $15,000 - 19,999
+  510: $15,000 - 15,999
+  520: $16,000 - 16,999
+  530: $17,000 - 17,999
+  540: $15,000 - 17,499
+  550: $17,500 - 19,999
+  560: $18,000 - 19,999
+  600: $20,000 - 24,999
+  700: $25,000 - 49,999
+  710: $25,000 - 29,999
+  720: $30,000 - 34,999
+  730: $35,000 - 39,999
+  740: $40,000 - 49,999
+  800: $50,000 and over
+  810: $50,000 - 74,999
+  820: $50,000 - 59,999
+  830: $60,000 - 74,999
+  840: $75,000 and over
+  841: $75,000 - 99,999
+  842: $100,000 - 149,999
+  843: $150,000 and over
+  995: Missing
+  996: Refused
+  997: Don't know
+  999: Blank
+----------------------------------------
+
+## Variable: AGE ##
+Label: Age 
+Description: Age gives each person's age at last birthday. 
+Codes and Labels:
+   0: Under 1 year
+  90: 90 (90+, 1988-2002)
+  99: 99+
+----------------------------------------
+
+## Variable: EDUC ##
+Label: Educational attainment recode 
+Description: EDUC indicates respondents' educational attainment, as measured by the highest year of school or degree completed. Note that completion differs from the highest year of school attendance; for example, respondents whoÂ attendedÂ 10th grade but did not finish were classified in EDUC as havingÂ completedÂ 9th grade.Â 
+
+EDUC is a combination of two other variables, HIGRADE and EDUC99, which measure educational attainment in different ways.  HIGRADE is available for years prior to 1992 and gives the respondent's highest grade of school or year of college completed.  EDUC99 is available beginning in 1992 and classifies high school graduates according to their highest degree or diploma attained.  
+
+General and detailed codes are not yet available for IPUMS-CPS, but one can construct the general version of EDUC by reading only the first two columns of EDUC. 
+Codes and Labels:
+    0: NIU or no schooling
+    1: NIU or blank
+    2: None or preschool
+   10: Grades 1, 2, 3, or 4
+   11: Grade 1
+   12: Grade 2
+   13: Grade 3
+   14: Grade 4
+   20: Grades 5 or 6
+   21: Grade 5
+   22: Grade 6
+   30: Grades 7 or 8
+   31: Grade 7
+   32: Grade 8
+   40: Grade 9
+   50: Grade 10
+   60: Grade 11
+   70: Grade 12
+   71: 12th grade, no diploma
+   72: 12th grade, diploma unclear
+   73: High school diploma or equivalent
+   80: 1 year of college
+   81: Some college but no degree
+   90: 2 years of college
+   91: Associate's degree, occupational/vocational program
+   92: Associate's degree, academic program
+  100: 3 years of college
+  110: 4 years of college
+  111: Bachelor's degree
+  120: 5+ years of college
+  121: 5 years of college
+  122: 6+ years of college
+  123: Master's degree
+  124: Professional school degree
+  125: Doctorate degree
+  999: Missing/Unknown
+----------------------------------------
+
+## Variable: EDDIPGED ##
+Label: High school or GED 
+Description: EDDIPGED indicates whether an individual completed high school by means of an equivalency test, such as the GED. The related variable, EDGED, is included in the education supplement and identifies GED earners from those with a traditional high school diploma for a slightly different universe of respondents. 
+Codes and Labels:
+   1: Graduated from high school
+   2: GED or other equivilent
+  99: NIU
+----------------------------------------
+
+## Variable: EDGRADE ##
+Label: Current level of school enrollment 
+Description: EDGRADE identifies the current grade or level of schooling for people currently enrolled in regular school (see EDATT). EDGRDLY reports the grade attended the previous year among people enrolled in that year.
+
+This variable is part of the Education Supplement 
+Codes and Labels:
+    11: Nursery (pre-school, pre-K) part-day
+    12: Nursery (pre-school, pre-K) full-day
+    21: Kindergarten part-day
+    22: Kindergarten full-day
+   101: 1st grade
+   102: 2nd grade
+   103: 3rd grade
+   104: 4th grade
+   105: 5th grade
+   106: 6th grade
+   107: 7th grade
+   108: 8th grade
+   201: 9th grade
+   202: 10th grade
+   203: 11th grade
+   204: 12th grade
+   301: College year 1 (freshman)
+   302: College year 2 (sophomore)
+   303: College year 3 (junior)
+   304: College year 4 (senior)
+   401: Graduate school year 1
+   402: Graduate school year 2+
+   501: Special School
+  9998: Not Avaliable
+  9999: NIU
+----------------------------------------
+
+## Variable: SCHLCOLL ##
+Label: School or college attendance 
+Description: SCHLCOLL indicates whether respondents age 16 to 24 (or 16 to 54 for ASEC 2013 onward) were enrolled in high school or college during the previous week, and, if so, whether they were enrolled full- or part-time.  College or high school students who were currently on holiday or seasonal vacation were to answer yes, but those not taking classes during summer vacation were to answer no.  Interviewers first asked whether the person was enrolled in school during the previous week, then determined whether the person was attending high school or attending a college or university, and finally asked whether the person was a full-time or part-time student.  In IPUMS-CPS, these responses are combined into the single variable SCHLCOLL. 
+Codes and Labels:
+  0: NIU
+  1: High school full time
+  2: High school part time
+  3: College or university full time
+  4: College or university part time
+  5: Does not attend school, college or university
+----------------------------------------
+
+## Variable: EDVOCA ##
+Label: Vocational training enrollment 
+Description: EDVOCA indicates whether or not a person is currently enrolled in a training program other than regular school or on-the-job training including business, vocational, technical, trade, or correspondence courses. Prior to 2006, the question wording also included "secretarial" in the types of training considered.
+
+This variable is part of the Education Supplement 
+Codes and Labels:
+   1: No
+   2: Yes
+  99: NIU
+----------------------------------------
+

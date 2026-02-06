@@ -1,0 +1,19 @@
+Basic Codebook for GSS Indicator: Happiness
+Data Source: GSS2024.sav
+Date Generated: 2025-12-16
+---
+Selected Variables (lowercase):
+---
+id: Unique Respondent Identifier (Assumed)
+wtssnrps: Weight variable adjusted for post-stratification and non-response (2004-2024)
+vstrat: Variance Stratum variable for complex survey design
+vpsu: Variance Primary Sampling Unit variable for complex survey design
+age: Respondent's Age in years
+sex: Respondent's Sex (coded by interviewer or derived)
+race: Respondent's Race (White, Black, Other - summary variable)
+hispanic: Are you Spanish, Hispanic, or Latino/Latina? IF YES: Which group are you from?
+educ: Highest Year of School Completed
+degree: Respondent's Highest Earned Degree
+marital: Are you currently married, widowed, divorced, separated, or never married?
+income16: In which of these groups did your total family income, from all sources, fall last year? That is, before taxes.
+happy: Taken all together, how would you say things are these days--would you say that you are very happy, pretty happy, or not too happy?

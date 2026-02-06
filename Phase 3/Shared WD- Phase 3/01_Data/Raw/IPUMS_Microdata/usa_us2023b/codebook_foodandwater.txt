@@ -1,0 +1,85 @@
+IPUMS Data Extract Codebook
+Source DDI: usa_00162.xml 
+Generated on: 2026-01-26 15:46:41.328651 
+========================================
+
+## Variable: SERIAL ##
+Label: Household serial number 
+Description: SERIAL is an identifying number unique to each household record in a given sample. All person records are assigned the same serial number as the household record that they follow. (Person records also have their own unique identifiers - see PERNUM.) A combination of SAMPLE and SERIAL provides a unique identifier for every household in the IPUMS; the combination of SAMPLE, SERIAL, and PERNUM uniquely identifies every person in the database.
+
+For 1850-1930, households that are part of a multi-household dwelling can be identified by using the DWELLING and DWSEQ variables. See "Sample Designs" for further discussion of sampling from within multi-household dwellings. 
+Codes and Labels: (Continuous or string variable)
+----------------------------------------
+
+## Variable: HHWT ##
+Label: Household weight 
+Description: HHWT indicates how many households in the U.S. population are represented by a given household in an IPUMS sample. 
+
+It is generally a good idea to use HHWT when conducting a household-level analysis of any IPUMS sample. The use of HHWT is optional when analyzing one of the "flat" or unweighted IPUMS samples. Flat IPUMS samples include the 1% samples from 1850-1930, all samples from 1960, 1970, and 1980, the 1% unweighted samples from 1990 and 2000, the 10% 2010 sample, and any of the full count 100% census datasets. HHWT must be used to obtain nationally representative statistics for household-level analyses of any sample other than those.
+
+Users should also be sure to select one person (e.g., PERNUM = 1) to represent the entire household.
+
+For further explanation of the sample weights, see "Sample Designs" and "Sample Weights". See also PERWT for a corresponding variable at the person level, and SLWT for a weight variable used with sample-line records in 1940 1% and 1950. 
+Codes and Labels: (Continuous or string variable)
+----------------------------------------
+
+## Variable: PERWT ##
+Label: Person weight 
+Description: PERWT indicates how many persons in the U.S. population are represented by a given person in an IPUMS sample. 
+
+It is generally a good idea to use PERWT when conducting a person-level analysis of any IPUMS sample. The use of PERWT is optional when analyzing one of the "flat" or unweighted IPUMS samples. Flat IPUMS samples include the 1% samples from 1850-1930, all samples from 1960, 1970, and 1980, the 1% unweighted samples from 1990 and 2000, the 10% 2010 sample, and any of the full count 100% census datasets. PERWT must be used to obtain nationally representative statistics for person-level analyses of any sample other than those.
+
+For further explanation of the sample weights, see "Sample Designs" and "Sample Weights". See also HHWT for a corresponding variable at the household level, and SLWT for a weight variable used with sample-line records in 1940 and 1950. 
+Codes and Labels: (Continuous or string variable)
+----------------------------------------
+
+## Variable: FOODSTMP ##
+Label: Food stamp recipiency 
+Description: FOODSTMP indicates whether anyone in the household received Food Stamps (now called the Supplemental Nutrition Assistance Program, or SNAP) at any time in the past 12 months. The Food Stamp Act of 1977 was enacted to increase the food purchasing power of eligible households through the use of coupons to purchase food. The Food and Nutrition Service of the U.S. Department of Agriculture (USDA) administers the Food Stamp Program/SNAP through state and local welfare offices. The Food Stamp Program/SNAP is the major national income support program which provides benefits to all low-income and low-resource households, regardless of the person's characteristics (e.g., sex, age, disability, etc.).  Although all of the ACS questionnaires 2007 and before asked respondents to report the total value of Food Stamps received in the past 12 months, this information is made publicly available only in the ACS and PRCS variable FDSTPAMT, which is available only from 2005-2007. 
+Codes and Labels:
+  0: N/A
+  1: No
+  2: Yes
+----------------------------------------
+
+## Variable: INCWELFR ##
+Label: Welfare (public assistance) income 
+Description: INCWELFR reports how much pre-tax income (if any) the respondent received during the previous year from various public assistance programs commonly referred to as "welfare." Assistance from private charities was not included. The censuses collected information on income received from these sources during the previous calendar year; for the ACS and the PRCS, the reference period was the past 12 months. The following are included within INCWELFR:
+
+federal/state Supplemental Security Income (SSI) payments to elderly (age 65+), blind, or disabled persons with low incomes. (In the 2000 census, the ACS, and the PRCS, SSI payments are specified in INCSUPP only, not in INCWELFR);
+
+Aid to Families with Dependent Children (AFDC); and
+
+General Assistance (GA). (This does not include separate payments for hospital or other medical care.)
+Amounts are expressed in contemporary dollars, and users studying change over time must adjust for inflation (See INCTOT for Consumer Price Index adjustment factors).  The exception is the ACS/PRCS multi-year files, where all dollar amounts have been standardized to dollars as valued in the final year of data included in the file (e.g., 2007 dollars for the 2005-2007 3-year file). Additionally, more detail may be available than exists in the original ACS samples.  
+
+Inflation-adjusted versions of this variable created with the Adjust Monetary Values tool will use the default reference year for the sample (i.e., survey year [YEAR] for ACS and previous year [YEAR-1] for decennials).
+
+User Note: ACS respondents are surveyed throughout the year, and amounts do not reflect calendar year dollars. While the Census Bureau provides an adjustment factor (available in ADJUST), this is an imperfect solution. See the ACS income variables note for further details. 
+Codes and Labels:
+  99999: N/A 
+----------------------------------------
+
+## Variable: COSTWATR ##
+Label: Annual water cost 
+Description: COSTWATR reports the annual water cost for each housing unit (rented or owned), excluding contract rent or other types of payments. 
+
+Amounts are expressed in contemporary dollars, and users studying change over time must adjust for inflation. See INCTOT for Consumer Price Index adjustment factors. The exception is the ACS/PRCS multi-year files, where all dollar amounts have been standardized to dollars as valued in the final year of data included in the file (e.g., 2007 dollars for the 2005-2007 3-year file). Additionally, more detail may be available than exists in the original ACS samples.
+
+COSTWATR amounts for renters are part of RENTGRS. Census Bureau research comparing respondents' reported costs with utility company records indicates that respondents tend to overstate their costs. 
+
+In 1970, COSTWATR only reported annual water costs for each rented housing unit. At this time, the universe for the U.S. Census samples specifies renter-occupied units rented for cash rent, not one-family houses on 10+ acres and not group quarters; however in the Puerto Rican census of 1970, this specification is for renter-occupied units rented for cash rent, not one-family houses on 3+ cuerdas, and not group quarters. In 1970 and 1980, the categories "included in rent" and "no charge" are combined, while they are distinguished in the 1990-2000 censuses and the ACS/PRCS.
+
+User Note: ACS respondents are surveyed throughout the year, and amounts do not reflect calendar year dollars. While the Census Bureau provides an adjustment factor (available in ADJUST), this is an imperfect solution. See the ACS income variables note for further details.
+
+Note about Puerto Rico land areas:
+The traditional unit of land area in Puerto Rico is the cuerda. The cuerda is equal to about 3930 square meters, 4700 square yards, or 0.971 acres. Because the cuerda and the acre are so close to being equal, they are often treated informally as being equal. Mainlanders sometimes call the unit the "Spanish Acre." IPUMS has preserved the units for the mainland U.S. as acres and Puerto Rico as cuerdas. 
+Codes and Labels:
+      0: N/A 
+      2: 1 or $2 (2000)
+  99993: No charge or no used (1990, 2000, 2003-onward ACS/PRCS) 
+  99995: Water included in rent or no charge (1970, 1980) 
+  99997: Water included in rent or in condo fee (1990, 2000, 2003-onward ACS/PRCS) 
+  99998: No charge, none used, or water included in rent or condo fee (2000-2002 ACS)
+----------------------------------------
+

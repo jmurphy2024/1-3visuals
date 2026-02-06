@@ -1,0 +1,121 @@
+IPUMS Data Extract Codebook
+Source DDI: usa_00007.xml 
+Generated on: 2026-01-29 10:40:51.177604 
+========================================
+
+## Variable: SERIAL ##
+Label: Household serial number 
+Description: SERIAL is an identifying number unique to each household record in a given sample. All person records are assigned the same serial number as the household record that they follow. (Person records also have their own unique identifiers - see PERNUM.) A combination of SAMPLE and SERIAL provides a unique identifier for every household in the IPUMS; the combination of SAMPLE, SERIAL, and PERNUM uniquely identifies every person in the database.
+
+For 1850-1930, households that are part of a multi-household dwelling can be identified by using the DWELLING and DWSEQ variables. See "Sample Designs" for further discussion of sampling from within multi-household dwellings. 
+Codes and Labels: (Continuous or string variable)
+----------------------------------------
+
+## Variable: PERNUM ##
+Label: Person number in sample unit 
+Description: PERNUM numbers all persons within each household consecutively in the order in which they appear on the original census or survey form. When combined with SAMPLE and SERIAL, PERNUM uniquely identifies each person within the IPUMS. 
+Codes and Labels: (Continuous or string variable)
+----------------------------------------
+
+## Variable: HHWT ##
+Label: Household weight 
+Description: HHWT indicates how many households in the U.S. population are represented by a given household in an IPUMS sample. 
+
+It is generally a good idea to use HHWT when conducting a household-level analysis of any IPUMS sample. The use of HHWT is optional when analyzing one of the "flat" or unweighted IPUMS samples. Flat IPUMS samples include the 1% samples from 1850-1930, all samples from 1960, 1970, and 1980, the 1% unweighted samples from 1990 and 2000, the 10% 2010 sample, and any of the full count 100% census datasets. HHWT must be used to obtain nationally representative statistics for household-level analyses of any sample other than those.
+
+Users should also be sure to select one person (e.g., PERNUM = 1) to represent the entire household.
+
+For further explanation of the sample weights, see "Sample Designs" and "Sample Weights". See also PERWT for a corresponding variable at the person level, and SLWT for a weight variable used with sample-line records in 1940 1% and 1950. 
+Codes and Labels: (Continuous or string variable)
+----------------------------------------
+
+## Variable: PERWT ##
+Label: Person weight 
+Description: PERWT indicates how many persons in the U.S. population are represented by a given person in an IPUMS sample. 
+
+It is generally a good idea to use PERWT when conducting a person-level analysis of any IPUMS sample. The use of PERWT is optional when analyzing one of the "flat" or unweighted IPUMS samples. Flat IPUMS samples include the 1% samples from 1850-1930, all samples from 1960, 1970, and 1980, the 1% unweighted samples from 1990 and 2000, the 10% 2010 sample, and any of the full count 100% census datasets. PERWT must be used to obtain nationally representative statistics for person-level analyses of any sample other than those.
+
+For further explanation of the sample weights, see "Sample Designs" and "Sample Weights". See also HHWT for a corresponding variable at the household level, and SLWT for a weight variable used with sample-line records in 1940 and 1950. 
+Codes and Labels: (Continuous or string variable)
+----------------------------------------
+
+## Variable: FTOTINC ##
+Label: Total family income 
+Description: FTOTINC reports the total pre-tax money income earned by one's family (as defined by FAMUNIT) from all sources for the previous year. For the census samples, the reference period is the previous calendar year; for the ACS/PRCS, it is the previous 12 months. 
+
+For 1950-1980, the amounts represent the midpoints of $10, $100, or other intervals used by each year's sample, not exact dollar amounts. 1990 gives exact dollar amounts. For the 2000 census, the ACS and the PRCS, FTOTINC is the sum of several income variables, each of which is rounded as follows:
+
+
+  
+    
+      No income 
+      $0  
+    
+    
+      &nbsp;$1 - $7 &nbsp;
+      $4  
+    
+    
+      &nbsp;$8 - $999 &nbsp;
+      rounded to nearest $10  
+    
+    
+	  &nbsp;$1,000 - $49,999 &nbsp;
+	  rounded to nearest $100  
+    
+    
+	  &nbsp;$50,000 or more &nbsp;
+	  rounded to nearest $1000 
+    
+    
+
+ 
+Codes and Labels:
+       -1: Net loss (1950) 
+        0: No income (1950-2000, ACS/PRCS) 
+  9999998: Not ascertained (1950) 
+  9999999: N/A 
+----------------------------------------
+
+## Variable: AGE ##
+Label: Age 
+Description: AGE reports the person's age in years as of the last birthday. 
+Codes and Labels:
+    0: Less than 1 year old
+   90: 90 (90+ in 1980 and 1990)
+  100: 100 (100+ in 1960-1970)
+  112: 112 (112+ in the 1980 internal data)
+  115: 115 (115+ in the 1990 internal data)
+  999: Missing
+----------------------------------------
+
+## Variable: HCOVANY ##
+Label: Any health insurance coverage 
+Description: HCOVANY indicates whether persons had any health insurance coverage at the time of interview, as measured by employer-provided insurance(HINSEMP), privately purchased insurance (HINSPUR), Medicare (HINSCARE), Medicaid or other governmental insurance (HINSCAID), TRICARE or other military care (HINSTRI), or Veterans Administration-provided insurance (HINSVA).  The Census Bureau does not consider respondents to have coverage if their only coverage is from Indian Health Services (HINSIHS), as IHS policies are not always comprehensive.
+
+For a summary of health insurance variables in the ACS/PRCS, see the IPUMS health insurance page. 
+Codes and Labels:
+  1: No health insurance coverage
+  2: With health insurance coverage
+----------------------------------------
+
+## Variable: HCOVPRIV ##
+Label: Private health insurance coverage 
+Description: HCOVPRIV indicates whether persons had private health insurance coverage at the time of interview.  The Census Bureau classifies employer- or union-provided insurance (HINSEMP), plans purchased by individuals from private insurance companies (HINSPUR), and TRICARE or other military health care (HINSTRI) as private coverage.
+
+For a summary of health insurance variables in the ACS/PRCS, see the IPUMS health insurance page. 
+Codes and Labels:
+  1: Without private health insurance coverage
+  2: With private health insurance coverage
+----------------------------------------
+
+## Variable: HCOVPUB ##
+Label: Public health insurance coverage 
+Description: HCOVPUB indicates whether persons had public health insurance coverage at the time of interview.  The Census Bureau classifies as "public insurance" the federal insurance programs Medicare (HINSCARE), Medicaid (HINSCAID), and Department of Veterans Affairs insurance (HINSVA).  The Census Bureau does not consider insurance provided by Indian Health Services to be public coverage, as IHS policies are not always comprehensive.
+
+For a summary of health insurance variables in the ACS/PRCS, see the IPUMS health insurance page. 
+Codes and Labels:
+  1: Without public health insurance coverage
+  2: With public health insurance coverage
+----------------------------------------
+

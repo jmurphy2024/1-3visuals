@@ -1,0 +1,24 @@
+IPUMS Data Extract Codebook
+Source DDI: cps_00165.xml 
+Generated on: 2026-01-02 13:30:24.23898 
+========================================
+
+## Variable: MARBASECIDP ##
+Label: Unique identifier for linking March Basic to ASEC 
+Description: MARBASECIDP is an IPUMS-CPS created ID for merging person records from the ASEC to their corresponding data on the March Basic file. MARBASECIDP is only useful for linking within a given year. For more information, see Flood and Pacas, 2017 and Flood et al., 2020. 
+Codes and Labels: (Continuous or string variable)
+----------------------------------------
+
+## Variable: UH_DSCWK_B2 ##
+Label: Discouraged worker recode, 1994-2025_11 
+Description: Discouraged worker recode - 1994-2025_11
+
+Unicon Corporation made the following notes about this variable:
+Discouraged workers are defined as persons not in the labor force who want and are available for a job and who have looked for work sometime in the past 12 months (or since the end of their last job if they held one within the past 12 months), but who are not currently looking because they believe there are no job available or there are none for which they would qualify. [Source: BLS definition taken from Employment and Earnings] 
+Codes and Labels:
+  -1: Blank
+   1: Discouraged worker
+   2: Conditionally interested
+   3: Not available
+----------------------------------------
+

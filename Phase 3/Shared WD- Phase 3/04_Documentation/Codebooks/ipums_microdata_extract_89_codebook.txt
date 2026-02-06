@@ -1,0 +1,53 @@
+IPUMS Data Extract Codebook
+Source DDI: usa_00089.xml 
+Generated on: 2025-09-12 07:18:53.381874 
+========================================
+
+## Variable: HHINCOME ##
+Label: Total household income  
+Description: HHINCOME reports the total money income of all household members age 15+ during the previous year. The amount should equal the sum of all household members' individual incomes, as recorded in the person-record variable INCTOT. The persons included were those present in the household at the time of the census or survey. People who lived in the household during the previous year but who were no longer present at census time are not included, and members who did not live in the household during the previous year but who had joined the household by the time of the census or survey, are included. For the census, the reference period is the previous calendar year; for the ACS and the PRCS, it is the previous 12 months. 
+
+Note that household income differs from family income, which is reported in FTOTINC. The family income variable only reports the incomes of household members related to the head, while HHINCOME includes the incomes of all household members. 
+
+Amounts are expressed in contemporary dollars, and users studying change over time must adjust for inflation (See INCTOT for Consumer Price Index adjustment factors).  The exception is the ACS/PRCS multi-year files, where all dollar amounts have been standardized to dollars as valued in the final year of data included in the file (e.g., 2007 dollars for the 2005-2007 3-year file). Additionally, more detail may be available than exists in the original ACS samples. 
+
+Inflation-adjusted versions of this variable created with the Adjust Monetary Values tool will use the default reference year for the sample (i.e., survey year [YEAR] for ACS and previous year [YEAR-1] for decennials).
+
+User Note: ACS respondents are surveyed throughout the year, and amounts do not reflect calendar year dollars. While the Census Bureau provides an adjustment factor (available in ADJUST), this is an imperfect solution. See the ACS income variables note for further details. 
+Codes and Labels:
+  9999999: N/A 
+----------------------------------------
+
+## Variable: HHWT ##
+Label: Household weight 
+Description: HHWT indicates how many households in the U.S. population are represented by a given household in an IPUMS sample. 
+
+It is generally a good idea to use HHWT when conducting a household-level analysis of any IPUMS sample. The use of HHWT is optional when analyzing one of the "flat" or unweighted IPUMS samples. Flat IPUMS samples include the 1% samples from 1850-1930, all samples from 1960, 1970, and 1980, the 1% unweighted samples from 1990 and 2000, the 10% 2010 sample, and any of the full count 100% census datasets. HHWT must be used to obtain nationally representative statistics for household-level analyses of any sample other than those.
+
+Users should also be sure to select one person (e.g., PERNUM = 1) to represent the entire household.
+
+For further explanation of the sample weights, see "Sample Designs" and "Sample Weights". See also PERWT for a corresponding variable at the person level, and SLWT for a weight variable used with sample-line records in 1940 1% and 1950. 
+Codes and Labels: (Continuous or no labels)
+----------------------------------------
+
+## Variable: PUMA ##
+Label: Public Use Microdata Area 
+Description: PUMA identifies the Public Use Microdata Area (PUMA) where the housing unit was located. PUMAs are the smallest geographic units identified in Public Use Microdata Samples since 1990 for both the decennial censuses and the ACS/PRCS. To help maintain the confidentiality of respondents in public use microdata, every PUMA must, by design, have at least 100,000 residents at the time of the corresponding census. 
+
+IPUMS has also created PUMAs for the 1960 5% sample, which each correspond approximately to one or more 2000 PUMAs using a minimum population threshold of 50,000.
+
+Note: PUMA codes are state-dependent. The PUMA codes for 1990 and later samples are unique only within each state, so a single code may identify different PUMAs in different states. To uniquely identify all PUMAs, it is necessary to combine the PUMA variable with a state identifier (STATEFIP or STATEICP). The IPUMS-defined 1960 PUMA codes are unique across all states and do not have this requirement.
+
+The Census Bureau updates PUMA definitions with each decennial census, so PUMA codes may or may not identify consistent areas over longer periods of time. See the Comparability section for information about which PUMAs are used in each sample. See the Codes section for information about each set of PUMA definitions.
+
+Note: In some multi-year samples, PUMA definitions vary or are allocated In multi-year ACS/PRCS samples that span a PUMA definition change, the identified PUMAs vary based on the survey year when each respondent was interviewed (as given by MULTYEAR). This occurs in samples that span the change from 2000 PUMAs (survey years 2000-2011) to 2010 PUMAs (survey years 2012-2021) and in the 2022 5-year ACS/PRCS sample (which uses 2010 PUMAs for survey years 2018-2021 and 2020 PUMAs in 2022). With the 2023 5-year ACS/PRCS sample, the Census Bureau began reporting only 2020 PUMAs for all survey years, which they achieved by assigning pre-2022 respondents a 2020 PUMA based on their 2010 PUMAs of residence and the known relationships between 2010 and 2020 PUMAs. The Bureau has provided no details on their PUMA allocation method, but IPUMS has confirmed that it produces plausible population totals for the assigned 2020 PUMAs.
+
+In 1980 samples, "county groups" (CNTYGP98) are functionally similar to PUMAs with the same minimum population threshold of 100,000. In fact, "county group" is a misnomer because 1980 county groups, like PUMAs, typically subdivide large-population counties into smaller areas (though 1980 county groups still do not subdivide cities within counties as PUMAs do). In contrast, the county groups in 1970 samples (CNTYGP97) nearly all correspond to groups of one or more counties with a minimum population threshold of 250,000. In 1940 and 1950 samples, the identified geographic areas most like PUMAs are State Economic Areas (SEA). 
+Codes and Labels:
+  1960: PUMAs and Mini-PUMAs: 1960 5% sample
+  1990: PUMAs: 1990 5% State and 1% Metro samples
+  1990: PUMAs crossing state lines: 1% Metro sample
+  2010: PUMAs: 2010 Census and 2012-2021 ACS/PRCS
+  2020: PUMAs: 2022-2031 ACS/PRCS
+----------------------------------------
+
