@@ -1,16 +1,23 @@
-## WD location: 02_Scripts/II- Shared Functions
-## Script: II-B Shared Visuals.r
-## Purpose: Defines standardized visualizations for the 1/3 Country Project.
-## Updates: Updated for 2023 5-Year Sample and ADJUST normalization.
-## Author: Janica Murphy, Max Goshert, EPAG / Gemini
-## Last Modified: 2026-02-06
+# ==============================================================================
+# SCRIPT: II-B Shared Visuals.R
+# LOCATION: 02_Scripts/II- Shared Functions/
+# PURPOSE:  Standardized visualization functions for the 1/3 Country Project.
+#           Contains logic for:
+#             1. Bar + Dot + Line Charts (for Average Income/Cost)
+#             2. Single Line Plots (for Prevalence Rates)
+# UPDATES:  Added 'create_bar_dot_line_plot' and column name robustness.
+# AUTHOR:   EPAG / Gemini
+# ==============================================================================
 
 # ==== 1. LOAD REQUIRED LIBRARIES ====
 library(ggplot2); library(dplyr); library(readr); library(purrr); library(stringr)
 library(here); library(ggtext); library(glue); library(grid); library(gridExtra)
 library(scales); library(ggnewscale); library(cowplot); library(tidyr)
 
+
 # ==== 2. INTERNAL HELPER FUNCTIONS ====
+
+# --- A. Legend Extraction ---
 get_legend <- function(plot) {
   plot_gtable <- tryCatch(ggplot2::ggplot_gtable(ggplot2::ggplot_build(plot)), error = function(e) NULL)
   if (is.null(plot_gtable)) return(grid::nullGrob())
@@ -19,16 +26,15 @@ get_legend <- function(plot) {
   else return(grid::nullGrob())
 }
 
+# --- B. Null Coalescing Operator ---
 `%||%` <- function(a, b) { if (is.null(a) || length(a) == 0 || all(is.na(a))) b else a }
 
+# --- C. X-Axis Data Preparation (For Line Plots) ---
 .prepare_x_axis_data <- function(borders_data, fine_group_level, border_t1_t2, border_t2_t3) {
-  # CHANGE: Point to 2023 5-Year border file
-  borders_path <- here("01_data", "processed", "within_tercile_quantile_borders_2023.csv")
   
-  if(file.exists(borders_path)) {
-    borders_data <- readr::read_csv(borders_path, show_col_types = FALSE)
-  } else {
-    stop("Error: 2023 Adjusted borders not found. Run II-C Border Setup first.")
+  # Robustness: Handle column name mismatch (MainTercile vs income_tercile_group)
+  if("income_tercile_group" %in% names(borders_data) && !"MainTercile" %in% names(borders_data)) {
+    borders_data <- borders_data %>% rename(MainTercile = income_tercile_group)
   }
   
   num_groups_per_tercile <- as.numeric(str_extract(fine_group_level, "\\d+"))
@@ -107,6 +113,7 @@ get_legend <- function(plot) {
   return(list(x_axis_info = x_axis_info, total_groups = total_groups, num_groups_per_tercile = num_groups_per_tercile))
 }
 
+# --- D. Base Plot Builder (Background Shading) ---
 .build_base_plot <- function(x_axis_data, plot_title, t1_color, t2_color, t3_color, 
                              background_alpha, vline_alpha, base_font, border_t1_t2, border_t2_t3) {
   
@@ -136,56 +143,148 @@ get_legend <- function(plot) {
     coord_cartesian(clip = "off")
 }
 
+# --- E. Final Layout & Saving (With 3-Color Bottom Labels) ---
 .arrange_and_save_plot <- function(ggplot_obj, output_filename, ...) {
-  args <- list(...); t1_color <- args$t1_color; t2_color <- args$t2_color; t3_color <- args$t3_color
-  base_font <- args$base_font; plot_legend <- get_legend(ggplot_obj)
+  args <- list(...)
+  t1_color <- args$t1_color %||% "#C0392B"
+  t2_color <- args$t2_color %||% "#F5B041"
+  t3_color <- args$t3_color %||% "#27AE60"
+  base_font <- args$base_font %||% "sans"
+  
+  plot_legend <- get_legend(ggplot_obj)
   g_no_legend <- ggplot_obj + theme(legend.position = "none")
   
-  label_grob_t1 <- textGrob("Bottom Third Country", gp = gpar(fontsize = 10, col = t1_color, fontfamily = base_font, fontface = "bold"))
-  label_grob_t2 <- textGrob("Middle Third Country", gp = gpar(fontsize = 10, col = t2_color, fontfamily = base_font, fontface = "bold"))
-  label_grob_t3 <- textGrob("Top Third Country", gp = gpar(fontsize = 10, col = t3_color, fontfamily = base_font, fontface = "bold"))
+  # Standard 1/3 Country Labels
+  label_grob_t1 <- textGrob("Bottom Third Country", gp = gpar(fontsize = 12, col = t1_color, fontfamily = base_font, fontface = "bold"))
+  label_grob_t2 <- textGrob("Middle Third Country", gp = gpar(fontsize = 12, col = t2_color, fontfamily = base_font, fontface = "bold"))
+  label_grob_t3 <- textGrob("Top Third Country", gp = gpar(fontsize = 12, col = t3_color, fontfamily = base_font, fontface = "bold"))
+  
+  # X-Axis Title (General)
   x_title_grob <- textGrob("Population Distribution by Household Income", gp = gpar(fontsize = 11, fontfamily = base_font, fontface = "bold"))
   
+  # Assemble Bottom Row
   bottom_row <- cowplot::plot_grid(label_grob_t1, label_grob_t2, label_grob_t3, nrow = 1)
+  
+  # Determine Layout based on legend presence
   plot_list <- list(g_no_legend, bottom_row, x_title_grob)
   heights <- c(1, 0.06, 0.04)
-  if (!inherits(plot_legend, "nullGrob")) { plot_list <- append(plot_list, list(plot_legend)); heights <- c(heights, 0.1) }
+  
+  if (!inherits(plot_legend, "nullGrob")) { 
+    plot_list <- append(plot_list, list(plot_legend))
+    heights <- c(heights, 0.1) 
+  }
   
   final_plot <- cowplot::plot_grid(plotlist = plot_list, ncol = 1, rel_heights = heights)
+  
+  # Ensure directory exists
   output_path <- here::here("03_output", "visualizations_final", output_filename)
-  cowplot::save_plot(output_path, final_plot, base_width = 10, base_height = 7, bg = "white")
+  dir.create(dirname(output_path), showWarnings = FALSE, recursive = TRUE)
+  
+  cowplot::save_plot(output_path, final_plot, base_width = 12, base_height = 8, bg = "white")
+  message(paste("Saved plot to:", output_path))
 }
 
+
+# ==============================================================================
 # ==== 3. EXPORTED VISUALIZATION FUNCTIONS ====
+# ==============================================================================
+
+# --- A. SINGLE LINE PLOT (For Prevalence Rates) ---
 create_single_line_plot <- function(summary_data, y_var, ...) {
   args <- list(...)
   
-  # CHANGE: Point to 2023 5-Year cutoff file
-  main_cutoffs <- readRDS(here("01_data", "processed", "main_tercile_cutoffs_2023.rds"))
+  # Default Colors
+  t1_col <- args$t1_color %||% "#C0392B"
+  t2_col <- args$t2_color %||% "#F5B041"
+  t3_col <- args$t3_color %||% "#27AE60"
   
-  # CHANGE: Use consistent naming from updated II-C ($main_cutoff1/2)
-  border_t1_t2 <- args$border_t1_t2 %||% main_cutoffs$main_cutoff1
-  border_t2_t3 <- args$border_t2_t3 %||% main_cutoffs$main_cutoff2
-  
+  # Parameters
   fine_group_level <- args$fine_group_level %||% "Groups_20"
   num_groups_per_tercile <- as.numeric(str_extract(fine_group_level, "\\d+"))
   
-  plot_data <- summary_data %>%
-    mutate(tercile_num = as.numeric(str_extract(income_tercile, "\\d")),
-           group_num = as.numeric(str_extract(fine_income_group, "\\d+$")),
-           quantile_position = (tercile_num - 1) * num_groups_per_tercile + group_num)
+  border_t1_t2 <- args$border_t1_t2
+  border_t2_t3 <- args$border_t2_t3
   
-  # CHANGE: Point to 2023 border CSV
+  # Prepare Plot Data
+  plot_data <- summary_data %>%
+    mutate(
+      tercile_num = as.numeric(str_extract(income_tercile, "\\d")),
+      group_num = as.numeric(str_extract(fine_income_group, "\\d+$")),
+      quantile_position = (tercile_num - 1) * num_groups_per_tercile + group_num
+    )
+  
+  # Load & Prep X-Axis Borders
   borders_data <- readr::read_csv(here("01_data", "processed", "within_tercile_quantile_borders_2023.csv"), show_col_types = FALSE)
   x_axis_data <- .prepare_x_axis_data(borders_data, fine_group_level, border_t1_t2, border_t2_t3)
   
-  base_plot <- .build_base_plot(x_axis_data, args$plot_title, args$t1_color %||% "#C0392B", args$t2_color %||% "#F5B041", 
-                                args$t3_color %||% "#27AE60", args$background_alpha %||% 0.2, args$vline_alpha %||% 0.25, 
+  # Build Base
+  base_plot <- .build_base_plot(x_axis_data, args$plot_title, t1_col, t2_col, t3_col, 
+                                args$background_alpha %||% 0.2, args$vline_alpha %||% 0.25, 
                                 args$base_font %||% "sans", border_t1_t2, border_t2_t3)
   
+  # Add Line Logic
   final_plot <- base_plot +
-    geom_smooth(data = plot_data, aes(x = quantile_position, y = .data[[y_var]]), method = "loess", span = 0.75, se = FALSE, color = "black") +
+    geom_smooth(data = plot_data, aes(x = quantile_position, y = .data[[y_var]]), 
+                method = "loess", span = 0.75, se = FALSE, color = "black") +
     scale_y_continuous(name = args$y_axis_label, labels = label_percent(accuracy = 1))
   
-  .arrange_and_save_plot(final_plot, args$output_filename, t1_color = "#C0392B", t2_color = "#F5B041", t3_color = "#27AE60", base_font = "sans")
+  .arrange_and_save_plot(final_plot, args$output_filename, t1_color=t1_col, t2_color=t2_col, t3_color=t3_col, base_font="sans")
+}
+
+
+# --- B. BAR + DOT + LINE PLOT (For Average Income) ---
+create_bar_dot_line_plot <- function(summary_data, y_var, plot_title, y_axis_label, output_filename, 
+                                     fine_group_level="Groups_20", 
+                                     t1_color="#C0392B", t2_color="#F5B041", t3_color="#27AE60", ...) {
+  
+  # Ensure data is sorted for correct plotting
+  plot_data <- summary_data %>%
+    arrange(income_tercile, fine_income_group) %>%
+    mutate(group_id = row_number()) # Numeric 1-20 ID for X-axis
+  
+  # Calculate approximate tercile boundaries for shading
+  # (e.g., if 20 groups total, split at 6.66 and 13.33)
+  total_groups <- max(plot_data$group_id)
+  x_bound_1 <- total_groups * (1/3) + 0.5
+  x_bound_2 <- total_groups * (2/3) + 0.5
+  
+  p <- ggplot(plot_data, aes(x = group_id, y = .data[[y_var]])) +
+    
+    # 1. Background Shading (Light Overlay)
+    annotate("rect", xmin = -Inf, xmax = x_bound_1, ymin = -Inf, ymax = Inf, fill = t1_color, alpha = 0.1) +
+    annotate("rect", xmin = x_bound_1, xmax = x_bound_2, ymin = -Inf, ymax = Inf, fill = t2_color, alpha = 0.1) +
+    annotate("rect", xmin = x_bound_2, xmax = Inf, ymin = -Inf, ymax = Inf, fill = t3_color, alpha = 0.1) +
+    
+    # 2. Vertical Dividers
+    geom_vline(xintercept = x_bound_1, linetype = "dashed", color = t2_color, alpha = 0.5) +
+    geom_vline(xintercept = x_bound_2, linetype = "dashed", color = t3_color, alpha = 0.5) +
+    
+    # 3. Bars
+    geom_col(aes(fill = income_tercile, color = income_tercile), alpha = 0.6, width = 0.85) +
+    
+    # 4. Trend Line (Connecting tops of bars)
+    geom_line(group = 1, color = "black", linewidth = 0.5) +
+    
+    # 5. Points (Dots on top)
+    geom_point(aes(color = income_tercile), size = 1.5) +
+    
+    # 6. Scales & Labels
+    scale_fill_manual(values = c(t1_color, t2_color, t3_color)) +
+    scale_color_manual(values = c(t1_color, t2_color, t3_color)) +
+    scale_y_continuous(labels = label_dollar(), expand = expansion(mult = c(0, 0.1))) +
+    scale_x_continuous(breaks = NULL) + # Clean look: no X-axis numbers
+    
+    labs(title = plot_title, y = y_axis_label, x = NULL) +
+    
+    theme_minimal(base_family = "sans") +
+    theme(
+      plot.title = element_text(hjust = 0.5, size = 18, face = "bold", margin = margin(b = 15)),
+      axis.title.y = element_text(size = 12, face = "bold", margin = margin(r = 10)),
+      legend.position = "none",
+      panel.grid.major.x = element_blank(),
+      panel.grid.minor = element_blank()
+    )
+  
+  # 7. Save
+  .arrange_and_save_plot(p, output_filename, t1_color=t1_color, t2_color=t2_color, t3_color=t3_color)
 }

@@ -20,6 +20,9 @@ HH_WEIGHT_VAR  <- "HHWT"
 processed_data_dir  <- here::here("01_data", "processed")
 income_borders_file <- file.path(processed_data_dir, "within_tercile_quantile_borders_2023.csv")
 main_cutoffs_file   <- file.path(processed_data_dir, "main_tercile_cutoffs_2023.rds")
+# --- Define Output Paths for Datasets ---
+raw_data_file       <- here::here("01_data", "processed", "ipums_data_raw.rds")
+adjusted_data_file  <- here::here("01_data", "processed", "ipums_data_adjusted.rds")
 
 # ==== 2. DATA ACQUISITION ====
 # Ensure we get demographics and inflation factors
@@ -40,6 +43,10 @@ minimal_files     <- download_extract(ready_extract, download_dir = here::here("
 # ==== 2.3. Load Data ====
 ddi_file   <- minimal_files[grep("\\.xml$", minimal_files)]
 ipums_data <- read_ipums_micro(ddi_file, verbose = FALSE) %>% lbl_clean()
+
+message(paste("Saving Raw Data to:", raw_data_file))
+saveRDS(ipums_data, raw_data_file)
+message("...Raw Data Saved.")
 
 # ==== 3. NORMALIZATION & GEOGRAPHIC CLEANING ====
 
@@ -74,6 +81,10 @@ ipums_data_adjusted <- ipums_data %>%
     REAL_INCOME = (income_cleaned * adj_factor) * (100 / coalesce(STATE_RPP, 100))
   ) %>%
   filter(!is.na(REAL_INCOME), REAL_INCOME > 0, !is.na(HHWT), HHWT > 0)
+
+message(paste("Saving Adjusted Data to:", adjusted_data_file))
+saveRDS(ipums_data_adjusted, adjusted_data_file)
+message("...Adjusted Data Saved.")
 
 # ==== 4. SURVEY DESIGN & DIAGNOSTICS ====
 
