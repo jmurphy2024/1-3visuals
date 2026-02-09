@@ -135,3 +135,80 @@ all_borders_df <- ipums_data_adjusted %>%
 
 write_csv(all_borders_df, income_borders_file)
 message("SUCCESS: within_tercile_quantile_borders_2023.csv created.")
+
+# ==============================================================================
+# SCRIPT: Income Summary Statistics (Nominal vs. Real) with Tercile Cutoffs
+# REQUIRES: Run 'II-C Border Setup.R' first to load 'survey_design'
+# ==============================================================================
+
+library(dplyr)
+library(survey)
+library(scales)
+library(readr)
+library(tibble)
+library(here)
+
+# 1. Verify Design Object Exists
+if (!exists("survey_design")) {
+  stop("Error: 'survey_design' object not found. Please run 'II-C Border Setup.R' first.")
+}
+
+message("Calculating weighted summary statistics with Tercile Cutoffs...")
+
+# 2. Calculate Weighted Means
+means <- svymean(~income_cleaned + REAL_INCOME, survey_design, na.rm = TRUE)
+
+# 3. Calculate Weighted Quantiles (Including 1/3 and 2/3 splits)
+# We define the exact probabilities we want
+q_probs <- c(0.10, 0.25, 1/3, 0.50, 2/3, 0.75, 0.90)
+q_labels <- c("10th Percentile", "25th Percentile", "Tercile 1 Ceiling (33.3%)", 
+              "Median (50th)", "Tercile 2 Ceiling (66.7%)", "75th Percentile", "90th Percentile")
+
+# Nominal Quantiles
+q_nom_obj <- svyquantile(~income_cleaned, survey_design, quantiles = q_probs, na.rm = TRUE, ci = FALSE)
+# Extract numeric vector safely
+q_nom_vals <- if(is.list(q_nom_obj) && !is.data.frame(q_nom_obj)) q_nom_obj[[1]] else q_nom_obj
+q_nom_vals <- as.numeric(q_nom_vals)
+
+# Real Quantiles
+q_real_obj <- svyquantile(~REAL_INCOME, survey_design, quantiles = q_probs, na.rm = TRUE, ci = FALSE)
+# Extract numeric vector safely
+q_real_vals <- if(is.list(q_real_obj) && !is.data.frame(q_real_obj)) q_real_obj[[1]] else q_real_obj
+q_real_vals <- as.numeric(q_real_vals)
+
+# 4. Construct the Comparison Table
+summary_stats <- tibble(
+  Metric = c("Mean Average", q_labels),
+  
+  # Raw / Nominal Income (Unadjusted)
+  Nominal_Income = c(as.numeric(coef(means)["income_cleaned"]), q_nom_vals),
+  
+  # Real / Adjusted Income (Inflation + RPP)
+  Real_Income = c(as.numeric(coef(means)["REAL_INCOME"]), q_real_vals)
+) %>%
+  mutate(
+    # Calculate Impact
+    Difference = Real_Income - Nominal_Income,
+    Pct_Change = (Difference / Nominal_Income),
+    
+    # Format for Export
+    Nominal_fmt = dollar(Nominal_Income, accuracy = 1),
+    Real_fmt    = dollar(Real_Income, accuracy = 1),
+    Diff_fmt    = dollar(Difference, accuracy = 1),
+    Pct_fmt     = percent(Pct_Change, accuracy = 0.1)
+  ) %>%
+  select(Metric, Nominal_fmt, Real_fmt, Diff_fmt, Pct_fmt) %>%
+  rename(
+    "Nominal Income" = Nominal_fmt,
+    "Real Income (Adj)" = Real_fmt,
+    "Difference ($)" = Diff_fmt,
+    "Difference (%)" = Pct_fmt
+  )
+
+# 5. Display and Export
+print(summary_stats)
+
+output_path <- here::here("03_output", "income_summary_with_terciles.csv")
+write_csv(summary_stats, output_path)
+
+message(paste("Success! Full summary table exported to:", output_path))
