@@ -1,6 +1,6 @@
 # ==== 0. ABOUT ====
-## WD location: 02_Scripts/III-Data Prep Templates
-## Script: 03_ACS_Household_Income_Viz.R
+## WD location:02_Scripts/III-Templates/ ACS
+## Script: ACS_hhincome_viz
 ## Purpose: Visualizes Average Household Income (Bar + Dot + Line Chart).
 ##          Loads 'ipums_data_adjusted.rds' from 01_data/processed.
 ##          Automatically fixes column headers for shared functions.
@@ -37,9 +37,9 @@ USER_WEIGHT_VAR       <- "HHWT"         # Household weights
 USER_DETAIL_LEVEL     <- "Groups_20"    # Ventiles (5% groups)
 
 # --- 1.3. Plot Aesthetics ---
-PLOT_TITLE       <- "Average Household Income (ACS)"
+PLOT_TITLE       <- "Average Household Income"
 Y_AXIS_LABEL     <- "Average Household Income"
-OUTPUT_FILENAME  <- paste0("plot_A1_", USER_INDICATOR_NAME, "_bar_dot_line.png")
+OUTPUT_FILENAME  <- paste0("IncomeBoundaries2023c.png")
 
 
 # ================================================================= #
