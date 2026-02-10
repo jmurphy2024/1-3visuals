@@ -1,5 +1,5 @@
 # ==============================================================================
-# SCRIPT 3: VISUALIZE (Race by Tercile)
+## WD location:02_Scripts/III-Templates/ ACS
 # Script: 03_ACS_Race_Viz.R
 # Purpose: Stacked Bar Chart of Race/Ethnicity composition per Income Tercile.
 # Output:  03_output/visualizations_final/plot_Race_Composition_by_Tercile.png

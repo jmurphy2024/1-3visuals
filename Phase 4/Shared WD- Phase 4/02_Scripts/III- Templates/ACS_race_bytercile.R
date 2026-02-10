@@ -1,7 +1,8 @@
 # ==============================================================================
-# SCRIPT 3: VISUALIZE (Individual Race Charts)
+## WD location:02_Scripts/III-Templates/ ACS
 # Script: 03_ACS_Race_Viz_Individual.R
 # Purpose: Generates 3 separate bar charts showing Racial Composition.
+# "What is the racial makeup of the Bottom Third?"
 # Updates: Fixed 'theme' duplicate argument error.
 # Output:  03_output/visualizations_final/plot_Race_Composition_Tercile_[1,2,3].png
 # ==============================================================================
