@@ -4,6 +4,9 @@
 ## Logic: Household Universe (PERNUM 1) | 5-Year Normalization (ADJUST) | RPP Adjusted
 ## Updated: 2026-02-09 | Added survey-based weighted diagnostics and demo extraction.
 
+# Ensure API key is set
+# set_ipums_api_key("YOUR_KEY_HERE", save = TRUE) # Run once interactively if needed
+
 # Clear environment
 rm(list = ls()); gc() 
 
