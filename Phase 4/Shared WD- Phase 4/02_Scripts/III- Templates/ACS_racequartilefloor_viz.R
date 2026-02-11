@@ -1,5 +1,5 @@
 # ==============================================================================
-# SCRIPT 3: VISUALIZE (Race by Quartile - INCOME FLOORS)
+## WD location:02_Scripts/III-Templates/ ACS
 # Script: 03_ACS_Race_Viz_Quartiles_Individual_Floors.R
 # Purpose: Generates 3 separate charts showing racial composition.
 # Update:  X-Axis now uses the FLOOR (Minimum) income of each group.
