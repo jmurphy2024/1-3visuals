@@ -9,7 +9,6 @@ library(ipumsr); library(dplyr); library(here); library(scales)
 source(here::here("02_Scripts", "II- Shared Functions", "II-D Income Normalization.R"))
 
 # 2. CONFIGURATION 
-# IPUMS Sample Code for 2023 5-year is 'us2023b'
 USER_SAMPLE   <- "acs_2023_5yr" 
 VARS_NEEDED   <- c("PERWT", "HHINCOME", "STATEFIP", "ADJUST", "AGE", "EDUC")
 TARGET_DIR    <- here::here("01_data", "raw", "IPUMS_Microdata", USER_SAMPLE)
