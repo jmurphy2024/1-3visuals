@@ -1,7 +1,7 @@
 # ==============================================================================
-# SCRIPT: II-A Shared Utilities.R
-# Purpose: Helper functions for assigning income groups.
-# Updated: Aligned to V2 Aggregated Logic & 10-Decile Per Country Standard
+# SCRIPT: II-A Shared Utilities2.R
+# Purpose: Helper functions for assigning income groups and inflation adjustments.
+# Updated: Aligned to V2 Aggregated Logic & Added Inflation Utility
 # ==============================================================================
 
 library(dplyr); library(rlang); library(stringr); library(readr); library(here); library(ipumsr)
@@ -37,4 +37,30 @@ assign_income_groups <- function(data_to_process, main_cutoff1, main_cutoff2, in
     dplyr::ungroup()
   
   return(final_data)
+}
+
+#' --- Inflation Adjustment Utility ---
+#' Standard CPI-U-RS Based Multipliers (Baseline 2023)
+#' @param data_year The year the data was collected.
+#' @param base_year The target year for dollar value (default 2023).
+get_inflation_multiplier <- function(data_year, base_year = 2023) {
+  # Multipliers based on official BLS/Census inflation indices
+  multipliers <- list(
+    "2024" = 0.970, # Deflate 2024 to 2023 dollars
+    "2023" = 1.000, # Baseline
+    "2022" = 1.041,
+    "2021" = 1.124,
+    "2020" = 1.177,
+    "2019" = 1.192
+  )
+  
+  val <- multipliers[[as.character(data_year)]]
+  
+  # Default to no adjustment (1.0) if year is not in the predefined list
+  if(is.null(val)) {
+    warning(paste("Inflation data for year", data_year, "not found. Using 1.0 multiplier."))
+    return(1.0)
+  }
+  
+  return(val)
 }
