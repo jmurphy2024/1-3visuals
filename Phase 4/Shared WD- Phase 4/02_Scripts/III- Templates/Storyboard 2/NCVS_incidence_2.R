@@ -1,24 +1,25 @@
 # ==============================================================================
 # SCRIPT: NCVS_Incidence_Skyline_2.R
 # Purpose: Generate 3-Country Skyline for Crime INCIDENCE (Total crimes per 100 pop)
-# Logic: Uses sum() to count all incidents per person + Dynamic V2 Borders
+# Logic: Uses sum() to count all incidents per person + Automated Summary Stats
 # ==============================================================================
 rm(list = ls()); gc()
 library(dplyr); library(here); library(stringr); library(tidyr); library(ggplot2)
 
 # 1. SOURCE MASTER LOGIC & CUTOFFS (V2)
+# ------------------------------------------------------------------------------
 source(here::here("02_Scripts", "II- Shared Functions", "II-A Shared Utilities2.R"))
-source(here::here("02_Scripts", "II- Shared Functions", "II-B Shared Visuals2.R"))
-source(here::here("02_Scripts", "II- Shared Functions", "II-D Income Normalization2.R"))
+source(here::here("02_Scripts", "II- Shared Functions", "II-D Skyline2.R"))
 
 cutoffs_path <- here::here("01_data", "processed", "main_tercile_cutoffs_person_inclusive2.rds")
-if(!file.exists(cutoffs_path)) stop("V2 Cutoffs not found. Run II-C Border Setup V2 first.")
+if(!file.exists(cutoffs_path)) stop("V2 Cutoffs not found.")
 cutoffs <- readRDS(cutoffs_path)
 set.seed(123) 
 
 extract_code <- function(x) { as.numeric(str_extract(as.character(x), "\\d+")) }
 
-# 2. DATA ACQUISITION (Corrected Safe Load)
+# 2. DATA ACQUISITION
+# ------------------------------------------------------------------------------
 HH_FILE   <- here::here("01_data", "raw", "NCVS", "ncvs_household_2023.rda")
 PER_FILE  <- here::here("01_data", "raw", "NCVS", "ncvs_person_2023.rda")
 INC_FILE  <- here::here("01_data", "raw", "NCVS", "ncvs_extract_2023.rda")
@@ -28,26 +29,21 @@ if (!file.exists(HH_FILE) | !file.exists(PER_FILE) | !file.exists(INC_FILE)) {
 }
 
 message("--- Loading NCVS RDA Files ---")
-hh_obj_name  <- load(HH_FILE)
-per_obj_name <- load(PER_FILE)
-inc_obj_name <- load(INC_FILE)
-
-ds2_raw <- get(hh_obj_name[1])
-ds3_raw <- get(per_obj_name[1])
-ds5_raw <- get(inc_obj_name[1])
-
-rm(list = c(hh_obj_name, per_obj_name, inc_obj_name))
-gc()
+hh_obj_name  <- load(HH_FILE); per_obj_name <- load(PER_FILE); inc_obj_name <- load(INC_FILE)
+ds2_raw <- get(hh_obj_name[1]); ds3_raw <- get(per_obj_name[1]); ds5_raw <- get(inc_obj_name[1])
+rm(list = c(hh_obj_name, per_obj_name, inc_obj_name)); gc()
 
 # 3. SPATIAL & TEMPORAL CONFIGURATION
-region_rpp_lookup <- tibble(REGION_ID = c(1, 2, 3, 4), REG_RPP = c(105.2, 92.8, 95.4, 104.1)) 
+# ------------------------------------------------------------------------------
 INFLATION_ADJ <- get_inflation_multiplier(data_year = 2023, base_year = 2023) 
 
 # 4. DEDUPLICATION
+# ------------------------------------------------------------------------------
 ds2_unique <- ds2_raw %>% group_by(IDHH) %>% slice(1) %>% ungroup() 
 ds3_unique <- ds3_raw %>% group_by(IDHH, IDPER) %>% slice(1) %>% ungroup() 
 
-# 5. THE UNIFIED PIPELINE (INCIDENCE LOGIC)
+# 5. THE UNIFIED PIPELINE
+# ------------------------------------------------------------------------------
 prepared_data <- ds3_unique %>%
   left_join(ds2_unique %>% select(IDHH, V2026, V2127B), by = "IDHH") %>% 
   left_join(ds5_raw %>% select(IDHH, IDPER, V4529), by = c("IDHH", "IDPER"), relationship = "one-to-many") %>% 
@@ -64,8 +60,6 @@ prepared_data <- ds3_unique %>%
     PERWT         = first(PERWT), 
     income_code   = first(income_code), 
     MAPPED_REGION = first(MAPPED_REGION), 
-    
-    # INCIDENCE: Uses sum() to count ALL incidents against this person
     Violent_Crime = sum(Violent_Crime, na.rm = TRUE), 
     Property_Crime= sum(Property_Crime, na.rm = TRUE), 
     .groups       = "drop" 
@@ -78,11 +72,11 @@ prepared_data <- ds3_unique %>%
       income_code == 5 ~ runif(n(),25000,34999),  income_code == 6 ~ runif(n(),35000,49999),
       income_code == 7 ~ runif(n(),50000,74999),  income_code == 17 ~ runif(n(),75000,250000), 
       TRUE             ~ runif(n(),35000,49999) 
-    )
-  ) %>%
-  left_join(region_rpp_lookup, by = c("MAPPED_REGION" = "REGION_ID")) %>% 
-  mutate(
-    REAL_INCOME = (raw_dollars * INFLATION_ADJ) * (100 / coalesce(REG_RPP, 100)), 
+    ),
+    
+    # --- ONE-STEP REAL INCOME NORMALIZATION ---
+    REAL_INCOME = raw_dollars * INFLATION_ADJ * get_regional_rpp_multiplier(MAPPED_REGION), 
+    
     Country = case_when(
       REAL_INCOME <= cutoffs$main_cutoff1 ~ "Bottom Third", 
       REAL_INCOME > cutoffs$main_cutoff1 & REAL_INCOME <= cutoffs$main_cutoff2 ~ "Middle Third", 
@@ -91,11 +85,18 @@ prepared_data <- ds3_unique %>%
   ) %>%
   filter(!is.na(REAL_INCOME), !is.na(Country)) 
 
-# 6. VISUALIZATION (With Incidence Caption)
-# ------------------------------------------------------------------------------
 plot_data <- prepared_data %>% rename(`Property Crime` = Property_Crime, `Violent Crime` = Violent_Crime)
 
-# Multi-line note formatting
+# 6. SUMMARY STATISTICS
+# ------------------------------------------------------------------------------
+message("\n=== PROPERTY CRIME SUMMARY ===")
+print(as.data.frame(get_country_summary(plot_data, "Property Crime", "PERWT")))
+
+message("\n=== VIOLENT CRIME SUMMARY ===")
+print(as.data.frame(get_country_summary(plot_data, "Violent Crime", "PERWT")))
+
+# 7. VISUALIZATION 
+# ------------------------------------------------------------------------------
 incidence_note <- paste0(
   "Incidence Rate: Measures the total volume of crimes committed per 100 persons.\n",
   "1. Methodology: Sums all reported incidents to capture the full burden of crime.\n",
@@ -111,5 +112,4 @@ p <- plot_economic_skyline_2(
   plot_title     = "NCVS_Incidence_Skyline_2",
   caption_text   = incidence_note
 )
-
 print(p)
