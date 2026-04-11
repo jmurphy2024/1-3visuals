@@ -17,7 +17,7 @@ source(here::here("02_Scripts", "II- Shared Functions", "II-A Shared Utilities2.
 
 # --- 1. CONFIGURATION ---
 # Target Population for Re-weighting (114M * 3 = 342M)
-TARGET_US_POPULATION <- 342000000 
+TARGET_US_POPULATION <- 342424906.
 ACS_SAMPLE_ID        <- "us2023c"  # 5-Year Sample
 
 # Paths 
@@ -119,17 +119,16 @@ message(paste("Scalar Applied:", round(pop_scalar, 5)))
 
 
 # ==============================================================================
-# SECTION C: CALCULATE BORDERS
+# SECTION C: CALCULATE BORDERS (STRICTLY TERCILES)
 # ==============================================================================
-message("\n--- Calculating Tercile (and Top 5%) Borders ---")
+message("\n--- Calculating Tercile Borders ---")
 
 person_design <- survey::svydesign(ids = ~1, weights = ~FINAL_WEIGHT, data = data_inclusive)
 
-# Added 0.95 for the 4-Country framework anchor
 main_q <- survey::svyquantile(
   ~REAL_INCOME, 
   design = person_design, 
-  quantiles = c(1/3, 2/3, 0.95), 
+  quantiles = c(1/3, 2/3), 
   na.rm = TRUE, 
   ci = FALSE
 )
@@ -139,8 +138,7 @@ q_vals <- if(is.list(main_q)) as.numeric(main_q[[1]]) else as.numeric(main_q)
 
 main_cutoffs <- list(
   main_cutoff1 = q_vals[1], 
-  main_cutoff2 = q_vals[2],
-  main_cutoff3 = q_vals[3] # 95th Percentile
+  main_cutoff2 = q_vals[2]
 )
 
 saveRDS(main_cutoffs, main_cutoffs_file)
