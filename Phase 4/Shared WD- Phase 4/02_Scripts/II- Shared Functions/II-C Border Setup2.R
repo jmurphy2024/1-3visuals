@@ -23,6 +23,7 @@ ACS_SAMPLE_ID        <- "us2023c"  # 5-Year Sample
 # Paths 
 processed_data_dir <- here::here("01_data", "processed")
 raw_data_path      <- file.path(processed_data_dir, "ipums_data_raw_native_hh.rds")
+clean_data_path    <- file.path(processed_data_dir, "prepared_ACS_native_hh.rds") # <-- ADD THIS
 main_cutoffs_file  <- file.path(processed_data_dir, "main_tercile_cutoffs_person_inclusive2.rds")
 borders_csv_file   <- file.path(processed_data_dir, "within_tercile_quantile_borders_person_inclusive2.csv")
 
