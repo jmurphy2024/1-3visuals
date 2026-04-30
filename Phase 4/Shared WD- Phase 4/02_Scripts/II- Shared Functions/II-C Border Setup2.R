@@ -4,7 +4,8 @@
 # Logic:   1. NATIVE HHINCOME: Uses Census HHINCOME directly (No INCTOT aggregation).
 #          2. Drop Negative Incomes (HHINCOME >= 0).
 #          3. Population Scaling (Target 342M).
-#          4. Generates Version 2 Map Cutoffs (RDS) and Chart Borders (CSV)
+#          4. Generates Version 2 Map Cutoffs (RDS), Chart Borders (CSV), and
+#             saves the cleaned intermediate dataset for visualization.
 # ==============================================================================
 
 rm(list = ls()); gc() 
@@ -16,14 +17,14 @@ library(data.table)
 source(here::here("02_Scripts", "II- Shared Functions", "II-A Shared Utilities2.R"))
 
 # --- 1. CONFIGURATION ---
-# Target Population for Re-weighting (114M * 3 = 342M)
-TARGET_US_POPULATION <- 342424906.
+# Target Population for Re-weighting 
+TARGET_US_POPULATION <- 342424906
 ACS_SAMPLE_ID        <- "us2023c"  # 5-Year Sample
 
 # Paths 
 processed_data_dir <- here::here("01_data", "processed")
 raw_data_path      <- file.path(processed_data_dir, "ipums_data_raw_native_hh.rds")
-clean_data_path    <- file.path(processed_data_dir, "prepared_ACS_native_hh.rds") # <-- ADD THIS
+clean_data_path    <- file.path(processed_data_dir, "prepared_ACS_native_hh.rds") # Output for charting
 main_cutoffs_file  <- file.path(processed_data_dir, "main_tercile_cutoffs_person_inclusive2.rds")
 borders_csv_file   <- file.path(processed_data_dir, "within_tercile_quantile_borders_person_inclusive2.csv")
 
@@ -72,7 +73,7 @@ if (file.exists(raw_data_path)) {
   ipums_data <- read_ipums_micro(read_ipums_ddi(ddi_file), verbose = FALSE)
   
   saveRDS(ipums_data, raw_data_path)
-  message(paste("✓ Data saved to:", raw_data_path))
+  message(paste("✓ Raw Data saved to:", raw_data_path))
 }
 
 
@@ -117,6 +118,10 @@ data_inclusive <- data_intermediate %>%
 
 message(paste("Population Scaled to Target:", comma(TARGET_US_POPULATION)))
 message(paste("Scalar Applied:", round(pop_scalar, 5)))
+
+# Step 4: Save Clean Data for Downstream Charting
+saveRDS(data_inclusive, clean_data_path)
+message(paste("✓ Cleaned dataset saved to:", clean_data_path))
 
 
 # ==============================================================================

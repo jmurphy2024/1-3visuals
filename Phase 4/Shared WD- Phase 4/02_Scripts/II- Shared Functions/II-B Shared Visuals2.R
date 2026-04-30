@@ -1,16 +1,14 @@
 # ==============================================================================
-# SCRIPT: II-B Shared Visuals.R
-# LOCATION: 02_Scripts/II- Shared Functions/
-# PURPOSE:  Standardized visualization functions for the 1/3 Country Project.
-# UPDATES:  Synced to Master Colors and 30-Point (10 Decile) X-Axis Standard.
+# SCRIPT: II-B Shared Visuals2.R
+# Purpose: Standardized visualization functions for the 3-Country Project.
+# Updated: Locked to Master Colors and 30-Point (10 Decile) X-Axis Standard.
 # ==============================================================================
 
-# ==== 1. LOAD REQUIRED LIBRARIES ====
 library(ggplot2); library(dplyr); library(readr); library(purrr); library(stringr)
 library(here); library(ggtext); library(glue); library(grid); library(gridExtra)
-library(scales); library(ggnewscale); library(cowplot); library(tidyr)
+library(scales); library(cowplot); library(tidyr)
 
-# ==== 2. MAIN VISUALIZATION FUNCTION ====
+# ==== 1. MAIN BAR/LINE VISUALIZATION FUNCTION ====
 create_bar_dot_line_plot <- function(
     summary_data, 
     y_var, 
@@ -26,6 +24,7 @@ create_bar_dot_line_plot <- function(
   
   # --- Validation ---
   if (!y_var %in% names(summary_data)) stop(paste("Error: Variable", y_var, "not found."))
+  if (!"decile" %in% names(summary_data)) stop("Error: 'decile' column not found. Run assign_income_groups() first.")
   
   # --- Data Prep ---
   # Ensure strict ordering of groups 1-30 (10 deciles x 3 countries)
@@ -38,7 +37,7 @@ create_bar_dot_line_plot <- function(
     # Create continuous X-axis 1 to 30
     dplyr::mutate(x_id = dplyr::row_number())
   
-  # --- Design Constants ---
+  # --- Design Constants (10 Deciles Per Country) ---
   # Shading Boundaries for 30-point scale (Divider after point 10 and 20)
   x_bound_1 <- 10.5
   x_bound_2 <- 20.5
@@ -87,7 +86,8 @@ create_bar_dot_line_plot <- function(
       panel.grid.minor = element_blank(),
       legend.position = "bottom",
       legend.title = element_blank(),
-      legend.text = element_text(size = 11, face = "bold")
+      legend.text = element_text(size = 11, face = "bold"),
+      plot.background = element_rect(fill = "white", color = NA)
     )
   
   # --- Save Output ---
@@ -95,10 +95,12 @@ create_bar_dot_line_plot <- function(
   if(!dir.exists(out_dir)) dir.create(out_dir, recursive = TRUE)
   
   ggsave(file.path(out_dir, output_filename), p, width = 12, height = 7, bg = "white", dpi = 300)
-  message(paste("Saved plot to:", output_filename))
+  message(paste("Saved plot to:", file.path(out_dir, output_filename)))
+  
+  return(p)
 }
 
-# ==== 3. SUMMARY TABLE FUNCTION ====
+# ==== 2. SUMMARY TABLE FUNCTION ====
 print_tercile_stats <- function(data_grouped, val_var, w_var = "PERWT", format_func = scales::dollar) {
   
   message("\n==========================================")
@@ -111,10 +113,11 @@ print_tercile_stats <- function(data_grouped, val_var, w_var = "PERWT", format_f
   tercile_summary <- data_grouped %>%
     group_by(income_tercile) %>%
     summarise(
-      Population   = sum(.data[[w_var]]),
+      Population   = sum(.data[[w_var]], na.rm = TRUE),
       Avg_Value    = weighted.mean(.data[[val_var]], w = .data[[w_var]], na.rm = TRUE),
       Min_Value    = min(.data[[val_var]], na.rm = TRUE),
-      Max_Value    = max(.data[[val_var]], na.rm = TRUE)
+      Max_Value    = max(.data[[val_var]], na.rm = TRUE),
+      .groups = "drop"
     ) %>%
     mutate(
       `Pop %`      = scales::percent(Population / sum(Population), accuracy = 0.1),
